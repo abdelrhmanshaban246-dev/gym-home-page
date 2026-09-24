@@ -9,7 +9,7 @@ const FOOTER_LINKS: { heading: string; links: string[] }[] = [
 const SOCIALS = [
   { icon: Instagram, label: "Instagram", href: "#" },
   { icon: Youtube, label: "YouTube", href: "#" },
-  { icon: Mail, label: "Email", href: "mailto:hello@forge.fit" },
+  { icon: Mail, label: "Email", href: "mailto:hello@elbody.com" },
 ];
 
 export function Footer() {
@@ -23,7 +23,7 @@ export function Footer() {
               <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Dumbbell className="size-4.5" />
               </span>
-              <span className="font-display text-xl tracking-wide">MY FITNESS</span>
+              <span className="font-display text-xl tracking-wide">ELBODY</span>
             </a>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
               Personal coaching that turns effort into measurable, lasting
@@ -60,7 +60,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border/60 pt-6 sm:flex-row">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} MY FITNESS. All rights reserved.
+            © {new Date().getFullYear()} ELBODY. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             {SOCIALS.map((social) => (

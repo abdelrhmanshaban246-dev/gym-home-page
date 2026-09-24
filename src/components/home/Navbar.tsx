@@ -39,7 +39,7 @@ export function Navbar() {
           <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
             <Dumbbell className="size-4.5" />
           </span>
-          <span className="font-display text-xl tracking-wide">MY FITNESS</span>
+          <span className="font-display text-xl tracking-wide">ELBODY</span>
         </a>
 
         {/* Desktop nav */}
