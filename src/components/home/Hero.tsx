@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Flame, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,10 @@ const fadeUp = {
 };
 
 export function Hero() {
+  // Hides the <img> if public/images/profile.png is missing, so the page
+  // never shows a broken-image icon while the file is not uploaded yet.
+  const [photoMissing, setPhotoMissing] = useState(false);
+
   return (
     <section
       id="top"
@@ -120,39 +125,26 @@ export function Hero() {
           </motion.dl>
         </motion.div>
 
-        {/* Personal coach photo — swap /images/profile.jpg to make it yours */}
+        {/* Personal coach photo — transparent cutout, no background behind it.
+            Drop your PNG at public/images/profile.png; nothing else to change. */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative mx-auto w-full max-w-md lg:max-w-none"
+          className="relative mx-auto flex w-full max-w-sm flex-col items-center sm:max-w-md lg:max-w-none"
         >
-          {/* Ambient accent glow behind the photo */}
-          <div
-            aria-hidden
-            className="absolute -inset-6 -z-20 rounded-[2.5rem] bg-primary/10 blur-3xl"
-          />
-          {/* Offset accent frame */}
-          <div
-            aria-hidden
-            className="absolute -right-4 -top-4 -z-10 hidden size-full rounded-2xl border border-primary/25 sm:block"
-          />
-          {/* Photo fades out at the bottom so it melts into the hero background */}
-          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card shadow-2xl shadow-black/50 [mask-image:linear-gradient(to_bottom,black_68%,transparent_99%)]">
+          {!photoMissing && (
             <img
-              src="/images/profile.jpg"
+              src="/images/profile.png"
               alt="Your personal fitness coach"
-              className="aspect-[4/5] w-full object-cover"
+              className="mx-auto block h-auto w-auto max-h-[72svh] max-w-full select-none object-contain object-bottom drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
+              onError={() => setPhotoMissing(true)}
               loading="eager"
             />
-            {/* Darkening gradient for seamless dark-background integration */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/25 to-transparent"
-            />
-          </div>
-          {/* Coach identity chip floats above the faded edge */}
-          <div className="absolute inset-x-4 bottom-10 flex items-center justify-between rounded-xl border border-border/60 bg-background/80 px-4 py-3 shadow-lg shadow-black/30 backdrop-blur-md">
+          )}
+
+          {/* Coach identity chip */}
+          <div className="mt-6 flex w-full max-w-xs items-center justify-between rounded-xl border border-border/60 bg-card/70 px-4 py-3 shadow-lg shadow-black/30 backdrop-blur-md">
             <div>
               <p className="text-sm font-bold">Your Name</p>
               <p className="text-xs text-muted-foreground">
