@@ -1,10 +1,18 @@
-import { Dumbbell, Instagram, Mail, MapPin } from "lucide-react";
+import { Dumbbell, Instagram, Mail } from "lucide-react";
 import type { ComponentType } from "react";
 
-const FOOTER_LINKS: { heading: string; links: string[] }[] = [
-  { heading: "Training", links: ["Exercises", "Programs", "Coaching", "Pricing"] },
-  { heading: "Company", links: ["About", "Testimonials", "Blog", "Careers"] },
-  { heading: "Legal", links: ["Privacy Policy", "Terms of Service"] },
+const FOOTER_LINKS: {
+  heading: string;
+  links: { label: string; href: string }[];
+}[] = [
+  {
+    heading: "Explore",
+    links: [
+      { label: "Exercises", href: "#exercises" },
+      { label: "Programs", href: "#programs" },
+      { label: "Contact", href: "#contact" },
+    ],
+  },
 ];
 
 const WHATSAPP_URL = "https://wa.me/201023604423";
@@ -50,10 +58,6 @@ export function Footer() {
               Personal coaching that turns effort into measurable, lasting
               results.
             </p>
-            <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
-              <MapPin className="size-4 text-primary/70" />
-              Ironworks Gym, Downtown District
-            </div>
           </div>
 
           {/* Link columns */}
@@ -64,12 +68,12 @@ export function Footer() {
               </p>
               <ul className="mt-4 space-y-2.5">
                 {column.links.map((link) => (
-                  <li key={link}>
+                  <li key={link.href}>
                     <a
-                      href="#"
+                      href={link.href}
                       className="text-sm text-muted-foreground transition-colors hover:text-primary"
                     >
-                      {link}
+                      {link.label}
                     </a>
                   </li>
                 ))}
