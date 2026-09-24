@@ -84,9 +84,8 @@ export function Hero() {
             custom={2}
             className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg"
           >
-            I'm your personal fitness coach — I design every workout around
-            your body, your goals, and your schedule. Train one-on-one with a
-            proven system and see measurable progress every single week.
+            Helping you build strength, improve your physique, and stay
+            consistent with a smarter approach to training.
           </motion.p>
 
           <motion.div
@@ -150,9 +149,9 @@ export function Hero() {
           {/* Coach identity chip */}
           <div className="mt-6 flex w-full max-w-xs items-center justify-between rounded-xl border border-border/60 bg-card/70 px-4 py-3 shadow-lg shadow-black/30 backdrop-blur-md">
             <div>
-              <p className="text-sm font-bold">Your Name</p>
+              <p className="text-sm font-bold">Abdelrhman</p>
               <p className="text-xs text-muted-foreground">
-                Certified Personal Fitness Coach
+                Personal Fitness Coach
               </p>
             </div>
             <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
