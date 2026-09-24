@@ -19,7 +19,14 @@ const fadeUp = {
 
 export function Hero() {
   return (
-    <section
+    <>
+      <link
+        rel="preload"
+        as="image"
+        href="/images/profile.png"
+        fetchPriority="high"
+      />
+      <section
       id="top"
       className="relative flex min-h-svh flex-col overflow-hidden pt-16"
     >
@@ -128,12 +135,14 @@ export function Hero() {
           className="relative mx-auto flex w-full max-w-sm flex-col items-center sm:max-w-md lg:ml-auto lg:max-w-none lg:justify-self-end"
         >
           <img
+            key="elbody-profile-hero"
             src="/images/profile.png"
             alt="ELBODY certified personal fitness coach"
             className="block h-auto w-auto max-h-[62svh] max-w-none select-none object-contain object-bottom drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)] sm:max-h-[74svh]"
             width={2048}
             height={1152}
             loading="eager"
+            decoding="sync"
             fetchPriority="high"
           />
 
@@ -151,6 +160,7 @@ export function Hero() {
           </div>
         </motion.div>
       </div>
-    </section>
+      </section>
+    </>
   );
 }
