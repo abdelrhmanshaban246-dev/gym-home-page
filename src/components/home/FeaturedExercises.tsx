@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Dumbbell, Gauge } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,34 +11,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SectionHeading } from "@/components/home/SectionHeading";
-
-type MuscleGroup = "All" | "Chest" | "Back" | "Shoulders" | "Arms" | "Legs";
-
-interface Exercise {
-  name: string;
-  muscle: string;
-  groups: Exclude<MuscleGroup, "All">[];
-}
-
-const MUSCLE_GROUPS: MuscleGroup[] = [
-  "All",
-  "Chest",
-  "Back",
-  "Shoulders",
-  "Arms",
-  "Legs",
-];
-
-const EXERCISES: Exercise[] = [
-  { name: "Bench Press", muscle: "Chest", groups: ["Chest"] },
-  { name: "Squat", muscle: "Legs", groups: ["Legs"] },
-  { name: "Deadlift", muscle: "Back / Legs", groups: ["Back", "Legs"] },
-  { name: "Lat Pulldown", muscle: "Back", groups: ["Back"] },
-  { name: "Shoulder Press", muscle: "Shoulders", groups: ["Shoulders"] },
-  { name: "Biceps Curl", muscle: "Biceps", groups: ["Arms"] },
-  { name: "Triceps Pushdown", muscle: "Triceps", groups: ["Arms"] },
-  { name: "Leg Press", muscle: "Legs", groups: ["Legs"] },
-];
+import {
+  EXERCISES,
+  MUSCLE_GROUPS,
+  type MuscleGroup,
+} from "@/data/exercises";
 
 function ExercisePlaceholder({ label }: { label: string }) {
   return (
@@ -147,12 +125,14 @@ export function FeaturedExercises() {
                   </CardContent>
                   <CardFooter className="p-5 pt-0">
                     <Button
-                      type="button"
+                      asChild
                       variant="outline"
                       className="w-full border-border font-semibold uppercase tracking-wide group-hover:border-primary/50 group-hover:text-primary"
                     >
-                      View Exercise
-                      <ArrowUpRight className="size-4" />
+                      <Link to={`/exercises/${exercise.slug}`}>
+                        View Exercise
+                        <ArrowUpRight className="size-4" />
+                      </Link>
                     </Button>
                   </CardFooter>
                 </Card>
