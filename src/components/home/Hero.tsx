@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Flame, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,10 +18,6 @@ const fadeUp = {
 };
 
 export function Hero() {
-  // Hides the <img> if public/images/profile.png is missing, so the page
-  // never shows a broken-image icon while the file is not uploaded yet.
-  const [photoMissing, setPhotoMissing] = useState(false);
-
   return (
     <section
       id="top"
@@ -125,23 +120,22 @@ export function Hero() {
           </motion.dl>
         </motion.div>
 
-        {/* Personal coach photo — transparent cutout, no background behind it.
-            Drop your PNG at public/images/profile.png; nothing else to change. */}
+        {/* Official ELBODY coach photo, shown as an unmodified transparent PNG. */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative mx-auto flex w-full max-w-sm flex-col items-center sm:max-w-md lg:max-w-none"
+          className="relative mx-auto flex w-full max-w-sm flex-col items-center sm:max-w-md lg:ml-auto lg:max-w-none lg:justify-self-end"
         >
-          {!photoMissing && (
-            <img
-              src="/images/profile.png"
-              alt="Your personal fitness coach"
-              className="mx-auto block h-auto w-auto max-h-[72svh] max-w-full select-none object-contain object-bottom drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)]"
-              onError={() => setPhotoMissing(true)}
-              loading="eager"
-            />
-          )}
+          <img
+            src="/images/profile.png"
+            alt="ELBODY certified personal fitness coach"
+            className="block h-auto w-auto max-h-[62svh] max-w-none select-none object-contain object-bottom drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)] sm:max-h-[74svh]"
+            width={2048}
+            height={1152}
+            loading="eager"
+            fetchPriority="high"
+          />
 
           {/* Coach identity chip */}
           <div className="mt-6 flex w-full max-w-xs items-center justify-between rounded-xl border border-border/60 bg-card/70 px-4 py-3 shadow-lg shadow-black/30 backdrop-blur-md">
