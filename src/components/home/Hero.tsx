@@ -127,36 +127,42 @@ export function Hero() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="relative mx-auto w-full max-w-md lg:max-w-none"
         >
-          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card shadow-2xl shadow-black/50">
+          {/* Ambient accent glow behind the photo */}
+          <div
+            aria-hidden
+            className="absolute -inset-6 -z-20 rounded-[2.5rem] bg-primary/10 blur-3xl"
+          />
+          {/* Offset accent frame */}
+          <div
+            aria-hidden
+            className="absolute -right-4 -top-4 -z-10 hidden size-full rounded-2xl border border-primary/25 sm:block"
+          />
+          {/* Photo fades out at the bottom so it melts into the hero background */}
+          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card shadow-2xl shadow-black/50 [mask-image:linear-gradient(to_bottom,black_68%,transparent_99%)]">
             <img
               src="/images/profile.jpg"
               alt="Your personal fitness coach"
               className="aspect-[4/5] w-full object-cover"
               loading="eager"
             />
-            {/* Dark integration gradient so the photo melts into the page */}
+            {/* Darkening gradient for seamless dark-background integration */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent"
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/25 to-transparent"
             />
-            {/* Coach identity bar */}
-            <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-xl border border-border/60 bg-background/80 px-4 py-3 backdrop-blur-md">
-              <div>
-                <p className="text-sm font-bold">Your Name</p>
-                <p className="text-xs text-muted-foreground">
-                  Certified Personal Fitness Coach
-                </p>
-              </div>
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
-                <Flame className="size-4" />
-              </span>
-            </div>
           </div>
-          {/* Offset accent frame */}
-          <div
-            aria-hidden
-            className="absolute -right-4 -top-4 -z-10 hidden size-full rounded-2xl border border-primary/25 sm:block"
-          />
+          {/* Coach identity chip floats above the faded edge */}
+          <div className="absolute inset-x-4 bottom-10 flex items-center justify-between rounded-xl border border-border/60 bg-background/80 px-4 py-3 shadow-lg shadow-black/30 backdrop-blur-md">
+            <div>
+              <p className="text-sm font-bold">Your Name</p>
+              <p className="text-xs text-muted-foreground">
+                Certified Personal Fitness Coach
+              </p>
+            </div>
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
+              <Flame className="size-4" />
+            </span>
+          </div>
         </motion.div>
       </div>
     </section>
