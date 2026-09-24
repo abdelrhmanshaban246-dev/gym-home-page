@@ -42,7 +42,7 @@ export function Hero() {
         className="pointer-events-none absolute -top-40 right-[-15%] size-[36rem] rounded-full bg-primary/15 blur-[120px]"
       />
 
-      <div className="relative mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-0">
+      <div className="relative mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 lg:pt-0">
         {/* Copy */}
         <motion.div
           initial="hidden"
@@ -56,7 +56,7 @@ export function Hero() {
           >
             <Flame className="size-3.5 text-primary" />
             <span className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-              Personal Coaching
+              Personal Fitness Coach
             </span>
           </motion.div>
 
@@ -76,9 +76,9 @@ export function Hero() {
             custom={2}
             className="mt-6 max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg"
           >
-            One-on-one strength coaching built around your body, your schedule,
-            and your goals. Train with a proven system — not guesswork — and
-            see real progress every single week.
+            I'm your personal fitness coach — I design every workout around
+            your body, your goals, and your schedule. Train one-on-one with a
+            proven system and see measurable progress every single week.
           </motion.p>
 
           <motion.div
@@ -120,55 +120,42 @@ export function Hero() {
           </motion.dl>
         </motion.div>
 
-        {/* Photo placeholder */}
+        {/* Personal coach photo — swap /images/profile.jpg to make it yours */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative hidden lg:block"
+          className="relative mx-auto w-full max-w-md lg:max-w-none"
         >
-          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card shadow-2xl shadow-black/40">
-            {/* Local placeholder — replace with your personal photo */}
-            <div className="flex aspect-[4/5] items-center justify-center bg-gradient-to-br from-muted to-card">
-              <div className="flex flex-col items-center gap-3 text-muted-foreground">
-                <svg
-                  className="size-12 opacity-50"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  viewBox="0 0 24 24"
-                  aria-hidden
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M3.75 21h16.5A1.5 1.5 0 0 0 21.75 19.5V4.5A1.5 1.5 0 0 0 20.25 3H3.75A1.5 1.5 0 0 0 2.25 4.5v15A1.5 1.5 0 0 0 3.75 21Z"
-                  />
-                </svg>
-                <span className="font-display text-sm uppercase tracking-[0.2em]">
-                  Your Photo
-                </span>
-                <span className="max-w-[16rem] text-center text-xs text-muted-foreground/70">
-                  Drop your personal photo here later
-                </span>
-              </div>
-            </div>
-            {/* Floating badge */}
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between rounded-xl border border-border/60 bg-background/80 px-4 py-3 backdrop-blur-md">
+          <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card shadow-2xl shadow-black/50">
+            <img
+              src="/images/profile.jpg"
+              alt="Your personal fitness coach"
+              className="aspect-[4/5] w-full object-cover"
+              loading="eager"
+            />
+            {/* Dark integration gradient so the photo melts into the page */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent"
+            />
+            {/* Coach identity bar */}
+            <div className="absolute inset-x-4 bottom-4 flex items-center justify-between rounded-xl border border-border/60 bg-background/80 px-4 py-3 backdrop-blur-md">
               <div>
-                <p className="text-sm font-bold">Alex Carter</p>
+                <p className="text-sm font-bold">Your Name</p>
                 <p className="text-xs text-muted-foreground">
-                  Certified Strength Coach
+                  Certified Personal Fitness Coach
                 </p>
               </div>
-              <span className="flex size-9 items-center justify-center rounded-full bg-primary/15 text-primary">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
                 <Flame className="size-4" />
               </span>
             </div>
           </div>
+          {/* Offset accent frame */}
           <div
             aria-hidden
-            className="absolute -right-6 -top-6 -z-10 size-full rounded-2xl border border-primary/25"
+            className="absolute -right-4 -top-4 -z-10 hidden size-full rounded-2xl border border-primary/25 sm:block"
           />
         </motion.div>
       </div>
