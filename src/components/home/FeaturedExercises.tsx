@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
-import { Gauge } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, Dumbbell, Gauge } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,22 +11,37 @@ import {
 } from "@/components/ui/card";
 import { SectionHeading } from "@/components/home/SectionHeading";
 
+type MuscleGroup = "All" | "Chest" | "Back" | "Shoulders" | "Arms" | "Legs";
+
 interface Exercise {
   name: string;
   muscle: string;
-  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  groups: Exclude<MuscleGroup, "All">[];
 }
 
-const EXERCISES: Exercise[] = [
-  { name: "Bench Press", muscle: "Chest", difficulty: "Intermediate" },
-  { name: "Squat", muscle: "Legs", difficulty: "Advanced" },
-  { name: "Lat Pulldown", muscle: "Back", difficulty: "Beginner" },
+const MUSCLE_GROUPS: MuscleGroup[] = [
+  "All",
+  "Chest",
+  "Back",
+  "Shoulders",
+  "Arms",
+  "Legs",
 ];
 
-// Simple local SVG placeholder — no external images
+const EXERCISES: Exercise[] = [
+  { name: "Bench Press", muscle: "Chest", groups: ["Chest"] },
+  { name: "Squat", muscle: "Legs", groups: ["Legs"] },
+  { name: "Deadlift", muscle: "Back / Legs", groups: ["Back", "Legs"] },
+  { name: "Lat Pulldown", muscle: "Back", groups: ["Back"] },
+  { name: "Shoulder Press", muscle: "Shoulders", groups: ["Shoulders"] },
+  { name: "Biceps Curl", muscle: "Biceps", groups: ["Arms"] },
+  { name: "Triceps Pushdown", muscle: "Triceps", groups: ["Arms"] },
+  { name: "Leg Press", muscle: "Legs", groups: ["Legs"] },
+];
+
 function ExercisePlaceholder({ label }: { label: string }) {
   return (
-    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-br from-muted to-card">
+    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-br from-primary/15 via-muted to-card">
       <div
         aria-hidden
         className="absolute inset-0 opacity-[0.06]"
@@ -35,66 +51,115 @@ function ExercisePlaceholder({ label }: { label: string }) {
           backgroundSize: "28px 28px",
         }}
       />
-      <span className="font-display text-lg uppercase tracking-[0.25em] text-muted-foreground/70">
-        {label}
-      </span>
+      <div
+        aria-hidden
+        className="absolute -right-12 -top-12 size-40 rounded-full bg-primary/10 blur-3xl transition-transform duration-500 group-hover:scale-125"
+      />
+      <div className="relative flex flex-col items-center gap-3 text-center">
+        <span className="flex size-14 items-center justify-center rounded-2xl border border-primary/25 bg-background/60 text-primary shadow-lg shadow-black/20 backdrop-blur-sm">
+          <Dumbbell className="size-6" />
+        </span>
+        <span className="font-display text-sm uppercase tracking-[0.18em] text-muted-foreground/70">
+          {label}
+        </span>
+      </div>
     </div>
   );
 }
 
-const DIFFICULTY_STYLES: Record<Exercise["difficulty"], string> = {
-  Beginner: "border-emerald-500/30 bg-emerald-500/10 text-emerald-400",
-  Intermediate: "border-primary/30 bg-primary/10 text-primary",
-  Advanced: "border-red-500/30 bg-red-500/10 text-red-400",
-};
-
 export function FeaturedExercises() {
+  const [selectedGroup, setSelectedGroup] = useState<MuscleGroup>("All");
+
+  const visibleExercises =
+    selectedGroup === "All"
+      ? EXERCISES
+      : EXERCISES.filter((exercise) =>
+          exercise.groups.includes(
+            selectedGroup as Exclude<MuscleGroup, "All">,
+          ),
+        );
+
   return (
     <section id="exercises" className="scroll-mt-20 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          eyebrow="Featured Exercises"
-          title="Master the fundamentals"
-          description="Three proven lifts that build the foundation of every strong, capable body. Technique first — load second."
+          eyebrow="Exercise Library"
+          title="Build stronger movements"
+          description="Explore foundational exercises by target muscle. Each entry is ready for detailed coaching content when exercise media is added."
         />
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {EXERCISES.map((exercise, i) => (
-            <motion.div
-              key={exercise.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, delay: i * 0.1, ease: "easeOut" }}
-            >
-              <Card className="group h-full overflow-hidden border-border/70 bg-card/80 py-0 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10">
-                <CardHeader className="p-0 pb-0">
-                  <div className="relative">
-                    <ExercisePlaceholder label={exercise.name} />
-                    <Badge
-                      className={`absolute left-3 top-3 border ${DIFFICULTY_STYLES[exercise.difficulty]}`}
-                    >
-                      {exercise.difficulty}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="p-5">
-                  <CardTitle className="font-display text-xl uppercase tracking-wide transition-colors group-hover:text-primary">
-                    {exercise.name}
-                  </CardTitle>
-                  <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                    <Gauge className="size-4 text-primary/70" />
-                    Target muscle:{" "}
-                    <span className="font-semibold text-foreground">
-                      {exercise.muscle}
-                    </span>
-                  </p>
-                </CardContent>
-                <CardFooter className="p-5 pt-0" />
-              </Card>
-            </motion.div>
-          ))}
+        <div
+          role="group"
+          aria-label="Filter exercises by muscle group"
+          className="mt-10 flex flex-wrap gap-2"
+        >
+          {MUSCLE_GROUPS.map((group) => {
+            const isSelected = selectedGroup === group;
+
+            return (
+              <button
+                key={group}
+                type="button"
+                aria-pressed={isSelected}
+                onClick={() => setSelectedGroup(group)}
+                className={`rounded-md border px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${
+                  isSelected
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border/70 bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-primary"
+                }`}
+              >
+                {group}
+              </button>
+            );
+          })}
         </div>
+
+        <motion.div layout className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <AnimatePresence mode="popLayout">
+            {visibleExercises.map((exercise, index) => (
+              <motion.div
+                layout
+                key={exercise.name}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{
+                  duration: 0.3,
+                  delay: Math.min(index, 3) * 0.04,
+                  ease: "easeOut",
+                }}
+              >
+                <Card className="group h-full overflow-hidden border-border/70 bg-card/80 py-0 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10">
+                  <CardHeader className="p-0 pb-0">
+                    <ExercisePlaceholder label={exercise.name} />
+                  </CardHeader>
+                  <CardContent className="p-5">
+                    <CardTitle className="font-display text-xl uppercase tracking-wide transition-colors group-hover:text-primary">
+                      {exercise.name}
+                    </CardTitle>
+                    <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                      <Gauge className="size-4 text-primary/70" />
+                      Target muscle:{" "}
+                      <span className="font-semibold text-foreground">
+                        {exercise.muscle}
+                      </span>
+                    </p>
+                  </CardContent>
+                  <CardFooter className="p-5 pt-0">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-border font-semibold uppercase tracking-wide group-hover:border-primary/50 group-hover:text-primary"
+                    >
+                      View Exercise
+                      <ArrowUpRight className="size-4" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   );
