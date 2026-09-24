@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Flame, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import profileImage from "@/assets/profile.png";
 
 const STATS = [
   { value: "12+", label: "Years coaching" },
@@ -23,7 +24,7 @@ export function Hero() {
       <link
         rel="preload"
         as="image"
-        href="/images/profile.png"
+        href={profileImage}
         fetchPriority="high"
       />
       <section
@@ -136,7 +137,7 @@ export function Hero() {
         >
           <img
             key="elbody-profile-hero"
-            src="/images/profile.png"
+            src={profileImage}
             alt="ELBODY certified personal fitness coach"
             className="block h-auto w-auto max-h-[62svh] max-w-none select-none object-contain object-bottom drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)] sm:max-h-[74svh]"
             width={1672}
