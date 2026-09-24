@@ -7,6 +7,8 @@ import { FeaturedExercises } from "@/components/home/FeaturedExercises";
 import { WorkoutPrograms } from "@/components/home/WorkoutPrograms";
 import { Footer } from "@/components/home/Footer";
 
+const WHATSAPP_URL = "https://wa.me/201023604423";
+
 export default function Landing() {
   return (
     <motion.div
@@ -32,9 +34,19 @@ export default function Landing() {
               Spots for one-on-one coaching are limited each month. Start today
               and get your personalized training plan within 48 hours.
             </p>
-            <Button size="lg" className="h-12 px-8 font-bold uppercase tracking-wider">
-              Start Training
-              <ArrowRight className="size-4" />
+            <Button
+              asChild
+              size="lg"
+              className="h-12 px-8 font-bold uppercase tracking-wider"
+            >
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Start Training
+                <ArrowRight className="size-4" />
+              </a>
             </Button>
           </div>
         </section>

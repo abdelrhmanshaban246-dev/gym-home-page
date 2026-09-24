@@ -3,6 +3,8 @@ import { Dumbbell, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+const WHATSAPP_URL = "https://wa.me/201023604423";
+
 const NAV_LINKS = [
   { label: "Exercises", href: "#exercises" },
   { label: "Programs", href: "#programs" },
@@ -56,8 +58,14 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button size="sm" className="font-semibold tracking-wide">
-            START TRAINING
+          <Button asChild size="sm" className="font-semibold tracking-wide">
+            <a
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              START TRAINING
+            </a>
           </Button>
         </div>
 
@@ -88,11 +96,18 @@ export function Navbar() {
               </a>
             ))}
             <Button
+              asChild
               size="sm"
               className="mt-3 w-full font-semibold tracking-wide"
-              onClick={() => setOpen(false)}
             >
-              START TRAINING
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+              >
+                START TRAINING
+              </a>
             </Button>
           </div>
         </nav>

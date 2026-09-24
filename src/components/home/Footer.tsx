@@ -7,18 +7,9 @@ const FOOTER_LINKS: { heading: string; links: string[] }[] = [
   { heading: "Legal", links: ["Privacy Policy", "Terms of Service"] },
 ];
 
-/* ─────────────────────────────────────────────────────────────
-   Contact links — PLACEHOLDERS. Replace the three values below
-   with your real contact details; nothing else needs to change.
-
-   1. WHATSAPP_URL  → https://wa.me/<your number>, digits only,
-                      including country code (e.g. https://wa.me/15551234567)
-   2. INSTAGRAM_URL → your Instagram profile URL
-   3. EMAIL_URL     → mailto:<your email address>
-   ───────────────────────────────────────────────────────────── */
-const WHATSAPP_URL = "https://wa.me/000000000000";
-const INSTAGRAM_URL = "https://instagram.com/your-handle";
-const EMAIL_URL = "mailto:you@example.com";
+const WHATSAPP_URL = "https://wa.me/201023604423";
+const INSTAGRAM_URL = "https://www.instagram.com/abdelrhmanelmeniar/";
+const EMAIL_URL = "mailto:abdelrhmanshaban246@gmail.com";
 
 /** WhatsApp glyph — lucide-react has no brand icons, so it lives here. */
 function WhatsAppIcon({ className }: { className?: string }) {
@@ -92,7 +83,7 @@ export function Footer() {
           <p className="text-xs text-muted-foreground">
             © {new Date().getFullYear()} ELBODY. All rights reserved.
           </p>
-          {/* Contact / social — values live in CONTACT_LINKS above */}
+          {/* Contact / social */}
           <div className="flex items-center gap-2">
             {CONTACT_LINKS.map((contact) => (
               <a

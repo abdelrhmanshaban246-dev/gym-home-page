@@ -3,6 +3,8 @@ import { ArrowRight, Flame, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import profileImage from "@/assets/profile.png";
 
+const WHATSAPP_URL = "https://wa.me/201023604423";
+
 const STATS = [
   { value: "12+", label: "Years coaching" },
   { value: "850+", label: "Clients transformed" },
@@ -93,9 +95,19 @@ export function Hero() {
             custom={3}
             className="mt-8 flex w-full flex-col gap-3 sm:w-auto sm:flex-row"
           >
-            <Button size="lg" className="h-12 px-8 font-bold uppercase tracking-wider">
-              Start Training
-              <ArrowRight className="size-4" />
+            <Button
+              asChild
+              size="lg"
+              className="h-12 px-8 font-bold uppercase tracking-wider"
+            >
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Start Training
+                <ArrowRight className="size-4" />
+              </a>
             </Button>
             <Button
               size="lg"
