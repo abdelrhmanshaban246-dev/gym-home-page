@@ -18,6 +18,8 @@
  *  - Wikimedia Commons demonstration clips and photographs (CC BY 3.0,
  *    CC BY 2.0, CC BY-SA 3.0 / 4.0, public domain).
  *  - free-exercise-db photographs (Unlicense / public domain).
+ *  - Mixkit demonstration clips (Mixkit Stock Video Free License), downloaded
+ *    from `assetUrl` rather than Commons.
  */
 
 export type ExerciseMediaKind = "video" | "photo";
@@ -38,6 +40,13 @@ export interface ExerciseMediaRecord {
    * letterboxed inside the existing surface instead of being upscaled.
    */
   fit?: "cover" | "contain";
+  /**
+   * Direct download URL for the clip, for sources that are not Wikimedia
+   * Commons (Mixkit). Commons entries derive their download from `sourceUrl`.
+   */
+  assetUrl?: string;
+  /** Poster frame download URL, paired with `assetUrl`. */
+  posterUrl?: string;
   sourceTitle: string;
   sourceUrl: string;
   license: string;
@@ -150,14 +159,18 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     author: "Uzltt123",
   },
   "chest-fly": {
-    kind: "photo",
-    src: "/exercises/chest-fly.jpg",
-    cardSrc: "/exercises/chest-fly.jpg",
-    sourceTitle: "Chest Fly Machine 1.jpg",
-    sourceUrl: `${COMMONS_FILE}Chest_Fly_Machine_1.jpg`,
-    license: "CC BY-SA 4.0",
-    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
-    author: "SAgbley",
+    kind: "video",
+    src: "/exercises/chest-fly.mp4",
+    cardSrc: "/exercises/chest-fly-poster.jpg",
+    assetUrl:
+      "https://assets.mixkit.co/active_storage/video_items/100546/1725385655/100546-video-720.mp4",
+    posterUrl:
+      "https://assets.mixkit.co/active_storage/video_items/100546/1725385655/100546-video-thumb-720-0.jpg",
+    sourceTitle: "Man performing cable fly exercise in gym",
+    sourceUrl: "https://mixkit.co/free-stock-video/man-performing-cable-fly-exercise-in-gym-100546/",
+    license: "Mixkit Stock Video Free License",
+    licenseUrl: "https://mixkit.co/license/",
+    author: "Mixkit",
   },
   "handstand-push-up": {
     kind: "photo",
@@ -254,14 +267,18 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     author: "Taco fleur",
   },
   "leg-press": {
-    kind: "photo",
-    src: "/exercises/leg-press.jpg",
-    cardSrc: "/exercises/leg-press.jpg",
-    sourceTitle: "Leg Press 1.jpg",
-    sourceUrl: `${COMMONS_FILE}Leg_Press_1.jpg`,
-    license: "CC BY-SA 4.0",
-    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
-    author: "SAgbley",
+    kind: "video",
+    src: "/exercises/leg-press.mp4",
+    cardSrc: "/exercises/leg-press-poster.jpg",
+    assetUrl:
+      "https://assets.mixkit.co/active_storage/video_items/100520/1725382896/100520-video-720.mp4",
+    posterUrl:
+      "https://assets.mixkit.co/active_storage/video_items/100520/1725382896/100520-video-thumb-720-0.jpg",
+    sourceTitle: "Woman using a leg press machine in the gym",
+    sourceUrl: "https://mixkit.co/free-stock-video/woman-using-a-leg-press-machine-in-the-gym-100520/",
+    license: "Mixkit Stock Video Free License",
+    licenseUrl: "https://mixkit.co/license/",
+    author: "Mixkit",
   },
   "leg-extension": {
     kind: "photo",
@@ -317,14 +334,18 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     author: "U.S. Navy photo",
   },
   "rowing-machine": {
-    kind: "photo",
-    src: "/exercises/rowing-machine.jpg",
-    cardSrc: "/exercises/rowing-machine.jpg",
-    sourceTitle: "Rowing Machine.jpg",
-    sourceUrl: `${COMMONS_FILE}Rowing_Machine.jpg`,
-    license: "CC BY-SA 4.0",
-    licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
-    author: "Tiia Monto",
+    kind: "video",
+    src: "/exercises/rowing-machine.mp4",
+    cardSrc: "/exercises/rowing-machine-poster.jpg",
+    assetUrl:
+      "https://assets.mixkit.co/active_storage/video_items/100550/1725385839/100550-video-720.mp4",
+    posterUrl:
+      "https://assets.mixkit.co/active_storage/video_items/100550/1725385839/100550-video-thumb-720-0.jpg",
+    sourceTitle: "Man exercising on a rowing machine in the gym",
+    sourceUrl: "https://mixkit.co/free-stock-video/man-exercising-on-a-rowing-machine-in-the-gym-100550/",
+    license: "Mixkit Stock Video Free License",
+    licenseUrl: "https://mixkit.co/license/",
+    author: "Mixkit",
   },
 };
 

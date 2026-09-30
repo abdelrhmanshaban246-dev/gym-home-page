@@ -80,13 +80,18 @@ async function download(url: string, attempt = 0) {
   return Buffer.from(await response.arrayBuffer());
 }
 
-function assertWebm(buffer: Buffer, slug: string) {
+/**
+ * Accepts WebM (Commons VP9 clips) and MP4 (Mixkit H.264 clips). The index
+ * atom is required so a saved error page can never pass as a usable video.
+ */
+function assertVideo(buffer: Buffer, slug: string) {
   const magic = [...buffer.slice(0, 4)];
-  const isWebm =
-    magic[0] === 0x1a && magic[1] === 0x45 && magic[2] === 0xdf && magic[3] === 0xa3;
-  if (!isWebm || buffer.length < MIN_VIDEO_BYTES) {
+  const isWebm = magic[0] === 0x1a && magic[1] === 0x45 && magic[2] === 0xdf && magic[3] === 0xa3;
+  const isMp4 =
+    buffer.toString("latin1", 4, 8) === "ftyp" && buffer.includes(Buffer.from("moov", "latin1"));
+  if ((!isWebm && !isMp4) || buffer.length < MIN_VIDEO_BYTES) {
     throw new Error(
-      `${slug}: not a usable WebM (${buffer.length} bytes, magic ${magic
+      `${slug}: not a usable video (${buffer.length} bytes, magic ${magic
         .map((b) => b.toString(16))
         .join(" ")})`,
     );
@@ -164,7 +169,7 @@ async function main() {
     }
 
     try {
-      if (!fileName) {
+      if (!fileName && media.kind !== "video") {
         // Non-Commons source (free-exercise-db): fetch each frame directly.
         const rawBase = media.sourceUrl
           .replace("https://github.com/", "https://raw.githubusercontent.com/")
@@ -188,14 +193,17 @@ async function main() {
       }
 
       if (media.kind === "video") {
-        const buffer = await download(
-          `https://commons.wikimedia.org/wiki/Special:FilePath/${fileName}`,
-        );
-        assertWebm(buffer, slug);
+        // Mixkit entries carry direct download URLs; Commons entries derive
+        // theirs from the file name in `sourceUrl`.
+        const videoUrl =
+          media.assetUrl ?? `https://commons.wikimedia.org/wiki/Special:FilePath/${fileName}`;
+        const buffer = await download(videoUrl);
+        assertVideo(buffer, slug);
         await writeFile(outputPath(media.src), buffer);
 
         const poster = await download(
-          `https://commons.wikimedia.org/wiki/Special:FilePath/${fileName}?width=${POSTER_WIDTH}`,
+          media.posterUrl ??
+            `https://commons.wikimedia.org/wiki/Special:FilePath/${fileName}?width=${POSTER_WIDTH}`,
         );
         const info = await writeImage(poster, outputPath(media.cardSrc));
         console.log(

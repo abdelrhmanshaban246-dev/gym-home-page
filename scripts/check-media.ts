@@ -27,6 +27,18 @@ const CARD_WIDTH = 240;
 const TARGET_ASPECT = 16 / 9;
 const ASPECT_TOLERANCE = 0.02;
 const MIN_VIDEO_BYTES = 50_000;
+
+/**
+ * Accepts the two containers the library uses: WebM (Commons VP9 clips) and
+ * MP4 (Mixkit H.264 clips, which play on Safari/iOS where VP9 does not).
+ * Requires the index atom so a saved error page can never pass as a video.
+ */
+function isPlayableVideo(bytes: Buffer): boolean {
+  const isWebm = bytes[0] === 0x1a && bytes[1] === 0x45 && bytes[2] === 0xdf && bytes[3] === 0xa3;
+  if (isWebm) return true;
+  const isMp4 = bytes.toString("latin1", 4, 8) === "ftyp";
+  return isMp4 && bytes.includes(Buffer.from("moov", "latin1"));
+}
 const MIN_IMAGE_BYTES = 5_000;
 
 const PUBLIC_DIR = join(process.cwd(), "public");
@@ -112,11 +124,9 @@ for (const exercise of EXERCISES) {
     } else {
       const bytes = readFileSync(file);
       const magic = [...bytes.slice(0, 4)];
-      const isWebm =
-        magic[0] === 0x1a && magic[1] === 0x45 && magic[2] === 0xdf && magic[3] === 0xa3;
-      if (!isWebm || bytes.length < MIN_VIDEO_BYTES) {
+      if (!isPlayableVideo(bytes) || bytes.length < MIN_VIDEO_BYTES) {
         problems.push(
-          `${exercise.slug}: ${media.src} is not a usable WebM (${bytes.length} bytes, magic ${magic
+          `${exercise.slug}: ${media.src} is not a usable video (${bytes.length} bytes, magic ${magic
             .map((b) => b.toString(16))
             .join(" ")}). Re-run \`bun run fetch:media\`.`,
         );
