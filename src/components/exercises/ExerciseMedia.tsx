@@ -136,6 +136,8 @@ function PhotoLoop({
     return () => clearInterval(interval);
   }, [frames.length, prefersReducedMotion]);
 
+  const fit = media.fit === "contain" ? "object-contain" : "object-cover";
+
   return (
     <>
       {frames.map((src, index) => (
@@ -146,7 +148,7 @@ function PhotoLoop({
           aria-hidden={index === 0 ? undefined : true}
           decoding="async"
           onError={onError}
-          className={`absolute inset-0 size-full object-cover transition-opacity duration-500 ${
+          className={`absolute inset-0 size-full ${fit} transition-opacity duration-500 ${
             index === frame ? "opacity-100" : "opacity-0"
           }`}
         />

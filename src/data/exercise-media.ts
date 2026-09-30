@@ -25,6 +25,11 @@ export interface ExerciseMediaRecord {
   cardSrc: string;
   /** Second photo frame used to build the detail cross-fade loop. */
   loopFrame?: string;
+  /**
+   * Set to "contain" when the source is narrower than the media area, so it is
+   * letterboxed inside the existing surface instead of being upscaled.
+   */
+  fit?: "cover" | "contain";
   sourceTitle: string;
   sourceUrl: string;
   license: string;
@@ -150,6 +155,9 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     kind: "photo",
     src: "/exercises/handstand-push-up.jpg",
     cardSrc: "/exercises/handstand-push-up.jpg",
+    // The only source asset is a portrait photograph, so it is letterboxed
+    // rather than cropped to a thin band in the 16:9 media area.
+    fit: "contain",
     sourceTitle: "Handstand pushup.jpg",
     sourceUrl: `${COMMONS_FILE}Handstand_pushup.jpg`,
     license: "Public domain",
@@ -221,6 +229,10 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     src: "/exercises/triceps-pushdown-0.jpg",
     cardSrc: "/exercises/triceps-pushdown-0.jpg",
     loopFrame: "/exercises/triceps-pushdown-1.jpg",
+    // 850px wide — narrower than the media area, so it is letterboxed rather
+    // than upscaled. This is the one exercise with no higher-resolution
+    // free asset available.
+    fit: "contain",
     sourceTitle: "Triceps Pushdown (free-exercise-db)",
     sourceUrl:
       "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Triceps_Pushdown/0.jpg",
