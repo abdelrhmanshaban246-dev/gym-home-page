@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ExerciseMedia } from "@/components/exercises/ExerciseMedia";
 import { getExerciseBySlug } from "@/data/exercises";
 
 function DetailList({
@@ -86,34 +87,25 @@ export default function ExerciseDetails() {
             </p>
           </div>
 
-          <div className="relative mt-10 flex aspect-video items-center justify-center overflow-hidden rounded-2xl border border-border/70 bg-gradient-to-br from-primary/15 via-muted to-card shadow-2xl shadow-black/20">
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-[0.06]"
-              style={{
-                backgroundImage:
-                  "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-                backgroundSize: "32px 32px",
-              }}
-            />
-            <div
-              aria-hidden
-              className="absolute -bottom-24 -left-20 size-72 rounded-full bg-primary/10 blur-3xl"
-            />
-            <div className="relative flex flex-col items-center gap-4 px-6 text-center">
-              <span className="flex size-16 items-center justify-center rounded-2xl border border-primary/25 bg-background/70 text-primary backdrop-blur-sm">
-                <Dumbbell className="size-7" />
-              </span>
-              <div>
-                <p className="font-display text-lg uppercase tracking-[0.2em]">
-                  Media Placeholder
-                </p>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Exercise video and image content will appear here.
-                </p>
+          <ExerciseMedia
+            name={exercise.name}
+            variant="detail"
+            fallback={
+              <div className="relative flex flex-col items-center gap-4 px-6 text-center">
+                <span className="flex size-16 items-center justify-center rounded-2xl border border-primary/25 bg-background/70 text-primary backdrop-blur-sm">
+                  <Dumbbell className="size-7" />
+                </span>
+                <div>
+                  <p className="font-display text-lg uppercase tracking-[0.2em]">
+                    Media Placeholder
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Exercise video and image content will appear here.
+                  </p>
+                </div>
               </div>
-            </div>
-          </div>
+            }
+          />
         </div>
       </section>
 

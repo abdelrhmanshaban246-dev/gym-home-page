@@ -10,40 +10,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ExerciseMedia } from "@/components/exercises/ExerciseMedia";
 import { SectionHeading } from "@/components/home/SectionHeading";
 import {
   EXERCISES,
   MUSCLE_GROUPS,
   type MuscleGroup,
 } from "@/data/exercises";
-
-function ExercisePlaceholder({ label }: { label: string }) {
-  return (
-    <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-br from-primary/15 via-muted to-card">
-      <div
-        aria-hidden
-        className="absolute inset-0 opacity-[0.06]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute -right-12 -top-12 size-40 rounded-full bg-primary/10 blur-3xl transition-transform duration-500 group-hover:scale-125"
-      />
-      <div className="relative flex flex-col items-center gap-3 text-center">
-        <span className="flex size-14 items-center justify-center rounded-2xl border border-primary/25 bg-background/60 text-primary shadow-lg shadow-black/20 backdrop-blur-sm">
-          <Dumbbell className="size-6" />
-        </span>
-        <span className="font-display text-sm uppercase tracking-[0.18em] text-muted-foreground/70">
-          {label}
-        </span>
-      </div>
-    </div>
-  );
-}
 
 export function FeaturedExercises() {
   const [selectedGroup, setSelectedGroup] = useState<MuscleGroup>("All");
@@ -63,7 +36,7 @@ export function FeaturedExercises() {
         <SectionHeading
           eyebrow="Exercise Library"
           title="Build stronger movements"
-          description="Explore foundational exercises by target muscle. Each entry is ready for detailed coaching content when exercise media is added."
+          description="Explore foundational exercises by target muscle. Each entry pairs the exercise demonstration with step-by-step coaching guidance."
         />
 
         <div
@@ -109,7 +82,19 @@ export function FeaturedExercises() {
               >
                 <Card className="group h-full overflow-hidden border-border/70 bg-card/80 py-0 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10">
                   <CardHeader className="p-0 pb-0">
-                    <ExercisePlaceholder label={exercise.name} />
+                    <ExerciseMedia
+                      name={exercise.name}
+                      fallback={
+                        <div className="relative flex flex-col items-center gap-3 px-4 text-center">
+                          <span className="flex size-14 items-center justify-center rounded-2xl border border-primary/25 bg-background/60 text-primary shadow-lg shadow-black/20 backdrop-blur-sm">
+                            <Dumbbell className="size-6" />
+                          </span>
+                          <span className="font-display text-sm uppercase tracking-[0.18em] text-muted-foreground/70">
+                            {exercise.name}
+                          </span>
+                        </div>
+                      }
+                    />
                   </CardHeader>
                   <CardContent className="p-5">
                     <CardTitle className="font-display text-xl uppercase tracking-wide transition-colors group-hover:text-primary">
