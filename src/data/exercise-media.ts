@@ -3,11 +3,16 @@
  * the Exercise Details page use, so a card, its route and its media can never
  * drift apart.
  *
- * Media lives in `public/exercises`:
- *  - `video` entries loop a 1280x720 demonstration clip on the details page and
- *    use a poster frame on the card.
- *  - `photo` entries use a 1400px wide photograph on the details page (never
- *    upscaled — the media area renders at ~976px) and the same image on the card.
+ * Media lives in `public/exercises` and is normalised by
+ * `bun run fetch:media` so the whole library shares one look:
+ *  - every photo is EXIF-oriented, centre-cropped to 16:9, capped at 1400px
+ *    wide (never upscaled) and levelled toward a common luminance so no
+ *    exercise is dramatically darker or brighter than the rest;
+ *  - `video` entries loop a 1280x720 demonstration clip and use a 16:9 poster
+ *    frame on the card.
+ *
+ * The only exception is an asset explicitly marked `fit: "contain"`, which is
+ * letterboxed rather than cropped or upscaled.
  *
  * Sources and licences are recorded per asset so credits stay accurate:
  *  - Wikimedia Commons demonstration clips and photographs (CC BY 3.0,
@@ -155,14 +160,11 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     kind: "photo",
     src: "/exercises/handstand-push-up.jpg",
     cardSrc: "/exercises/handstand-push-up.jpg",
-    // The only source asset is a portrait photograph, so it is letterboxed
-    // rather than cropped to a thin band in the 16:9 media area.
-    fit: "contain",
-    sourceTitle: "Handstand pushup.jpg",
-    sourceUrl: `${COMMONS_FILE}Handstand_pushup.jpg`,
+    sourceTitle: "USMC-102406-M-0058D-001085.jpg",
+    sourceUrl: `${COMMONS_FILE}USMC-102406-M-0058D-001085.jpg`,
     license: "Public domain",
-    licenseUrl: `${COMMONS_FILE}Handstand_pushup.jpg`,
-    author: "U.S. Air Force photo by Senior Airman Seni)",
+    licenseUrl: `${COMMONS_FILE}USMC-102406-M-0058D-001085.jpg`,
+    author: "U.S. Marine Corps photo",
   },
   "lat-pulldown": {
     kind: "photo",
@@ -230,8 +232,7 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     cardSrc: "/exercises/triceps-pushdown-0.jpg",
     loopFrame: "/exercises/triceps-pushdown-1.jpg",
     // 850px wide — narrower than the media area, so it is letterboxed rather
-    // than upscaled. This is the one exercise with no higher-resolution
-    // free asset available.
+    // than upscaled. No higher-resolution free asset exists for this lift.
     fit: "contain",
     sourceTitle: "Triceps Pushdown (free-exercise-db)",
     sourceUrl:
@@ -336,27 +337,15 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
   },
 };
 
-const EXERCISE_DB_MEDIA = "https://static.exercisedb.dev/media";
-
-/**
- * ExerciseDB demonstration GIFs used on the exercise cards, where a matching
- * clip exists. Cards fall back to the detail media still when it does not.
- */
-export const EXERCISE_CARD_GIFS: Record<string, string> = {
-  "bench-press": `${EXERCISE_DB_MEDIA}/EIeI8Vf.gif`,
-  squat: `${EXERCISE_DB_MEDIA}/Gnfo4FM.gif`,
-  deadlift: `${EXERCISE_DB_MEDIA}/ila4NZS.gif`,
-  "lat-pulldown": `${EXERCISE_DB_MEDIA}/LEprlgG.gif`,
-  "shoulder-press": `${EXERCISE_DB_MEDIA}/q7qkONO.gif`,
-  "biceps-curl": `${EXERCISE_DB_MEDIA}/NbVPDMW.gif`,
-  "triceps-pushdown": `${EXERCISE_DB_MEDIA}/dU605di.gif`,
-  "leg-press": `${EXERCISE_DB_MEDIA}/2Qh2J1e.gif`,
-};
-
 export function getExerciseMedia(slug: string | undefined) {
   return slug ? EXERCISE_MEDIA[slug] : undefined;
 }
 
+/**
+ * Card media always comes from the same asset as the detail page (a poster
+ * frame for videos, the graded 16:9 still for photos), so the grid and the
+ * detail view read as one library.
+ */
 export function getExerciseCardMedia(slug: string) {
-  return EXERCISE_CARD_GIFS[slug] ?? EXERCISE_MEDIA[slug]?.cardSrc;
+  return EXERCISE_MEDIA[slug]?.cardSrc;
 }

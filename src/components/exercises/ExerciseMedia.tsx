@@ -36,11 +36,9 @@ export function ExerciseCardMedia({
   const src = getExerciseCardMedia(slug);
   const [failed, setFailed] = useState(false);
   const showMedia = Boolean(src) && !failed;
-  // ExerciseDB GIFs are square, so they stay padded to keep the full movement
-  // visible; landscape stills fill the card instead.
-  const fit = src?.endsWith(".gif")
-    ? "object-contain p-3 sm:p-4"
-    : "object-cover";
+  // Cards use the same graded 16:9 asset as the detail page, so the grid and
+  // the detail view read as one library.
+  const fit = "object-cover";
 
   return (
     <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-gradient-to-br from-primary/15 via-muted to-card">

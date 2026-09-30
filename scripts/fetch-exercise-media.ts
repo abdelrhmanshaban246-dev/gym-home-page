@@ -22,8 +22,14 @@ import { EXERCISE_MEDIA } from "../src/data/exercise-media";
 
 /** The details media area renders at ~976px wide; stay above it, never below. */
 const MAX_IMAGE_WIDTH = 1400;
-const POSTER_WIDTH = 800;
+const POSTER_WIDTH = 960;
 const RENDER_WIDTH = 976;
+/** Every asset is normalised to 16:9 so the library shares one frame. */
+const TARGET_ASPECT = 16 / 9;
+/** Shared mean luminance, so no photo is noticeably darker or brighter. */
+const TARGET_LUMA = 118;
+const MAX_LUMA_SHIFT = 40;
+const SATURATION = 1.08;
 const MIN_VIDEO_BYTES = 50_000;
 const MIN_IMAGE_BYTES = 5_000;
 const USER_AGENT =
@@ -84,19 +90,63 @@ function assertWebm(buffer: Buffer, slug: string) {
   }
 }
 
-/** Applies EXIF orientation and caps the width without ever enlarging. */
-async function writeImage(source: Buffer, target: string) {
-  const image = sharp(source).rotate();
-  const { data, info } = await image
+/**
+ * Normalises a photo into the library's shared presentation:
+ * EXIF orientation, capped width (never enlarged), a centre crop to 16:9, and
+ * a uniform luminance/saturation grade.
+ *
+ * `crop` is skipped for assets marked `fit: "contain"`, which are letterboxed
+ * because their source is too small to fill the frame.
+ */
+async function writeImage(
+  source: Buffer,
+  target: string,
+  options: { crop?: boolean } = {},
+) {
+  const { crop = true } = options;
+
+  // Pass 1: apply EXIF orientation and cap the width, never enlarging.
+  const base = await sharp(source)
+    .rotate()
     .resize({ width: MAX_IMAGE_WIDTH, withoutEnlargement: true })
-    .jpeg({ quality: 82, progressive: true })
+    .toBuffer();
+
+  const { width = 0, height = 0 } = await sharp(base).metadata();
+
+  // Pass 2: centre-crop to the shared 16:9 frame (cropping never enlarges).
+  let pipeline = sharp(base);
+  if (crop && width && height) {
+    const cropWidth =
+      width / height > TARGET_ASPECT ? Math.round(height * TARGET_ASPECT) : width;
+    const cropHeight =
+      width / height > TARGET_ASPECT ? height : Math.round(width / TARGET_ASPECT);
+    pipeline = pipeline.resize({
+      width: cropWidth,
+      height: cropHeight,
+      fit: "cover",
+      position: "centre",
+    });
+  }
+
+  // Pass 3: uniform grade so no exercise is much darker or brighter.
+  const stats = await pipeline.clone().stats();
+  const mean = (stats.channels[0].mean + stats.channels[1].mean + stats.channels[2].mean) / 3;
+  const shift = Math.max(
+    -MAX_LUMA_SHIFT,
+    Math.min(MAX_LUMA_SHIFT, TARGET_LUMA - mean),
+  );
+
+  const { data, info } = await pipeline
+    .linear(1, shift)
+    .modulate({ saturation: SATURATION })
+    .jpeg({ quality: 84, progressive: true })
     .toBuffer({ resolveWithObject: true });
 
   if (data.length < MIN_IMAGE_BYTES) {
     throw new Error(`${target}: produced only ${data.length} bytes`);
   }
   await writeFile(target, data);
-  return info;
+  return { ...info, lumaShift: Math.round(shift) };
 }
 
 async function main() {
@@ -121,8 +171,11 @@ async function main() {
           const info = await writeImage(
             Buffer.from(await response.arrayBuffer()),
             outputPath(src),
+            { crop: media.fit !== "contain" },
           );
-          console.log(`${slug.padEnd(22)} photo ${src} -> ${info.width}x${info.height}`);
+          console.log(
+            `${slug.padEnd(22)} photo ${src} -> ${info.width}x${info.height} (letterboxed)`,
+          );
         }
         continue;
       }
@@ -147,7 +200,9 @@ async function main() {
       const original = await download(
         `https://commons.wikimedia.org/wiki/Special:FilePath/${fileName}`,
       );
-      const info = await writeImage(original, outputPath(media.src));
+      const info = await writeImage(original, outputPath(media.src), {
+        crop: media.fit !== "contain",
+      });
       const fits = info.width >= RENDER_WIDTH;
       if (!fits) {
         failures.push(
@@ -155,7 +210,11 @@ async function main() {
         );
       }
       console.log(
-        `${slug.padEnd(22)} photo ${info.width}x${info.height} (${(info.size / 1024).toFixed(0)}KB)${fits ? "" : " TOO NARROW"}`,
+        `${slug.padEnd(22)} photo ${info.width}x${info.height} ar ${(
+          (info.width ?? 0) / (info.height ?? 1)
+        ).toFixed(2)} (${(info.size / 1024).toFixed(0)}KB, luma ${info.lumaShift >= 0 ? "+" : ""}${
+          info.lumaShift
+        })${fits ? "" : " TOO NARROW"}`,
       );
     } catch (error) {
       failures.push(`${slug}: ${(error as Error).message}`);

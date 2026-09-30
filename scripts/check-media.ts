@@ -15,14 +15,14 @@ import { join } from "node:path";
 import sharp from "sharp";
 
 import { EXERCISES } from "../src/data/exercises";
-import {
-  EXERCISE_CARD_GIFS,
-  EXERCISE_MEDIA,
-} from "../src/data/exercise-media";
+import { EXERCISE_MEDIA } from "../src/data/exercise-media";
 
 /** The details media area renders at ~976x549; cards at ~240x150. */
 const DETAIL_WIDTH = 976;
 const CARD_WIDTH = 240;
+/** Every asset is normalised to 16:9 so the library shares one frame. */
+const TARGET_ASPECT = 16 / 9;
+const ASPECT_TOLERANCE = 0.02;
 const MIN_VIDEO_BYTES = 50_000;
 const MIN_IMAGE_BYTES = 5_000;
 
@@ -108,22 +108,31 @@ for (const exercise of EXERCISES) {
       }
     }
 
-    await checkImage(exercise.slug, "cardSrc", media.cardSrc, CARD_WIDTH);
+    const poster = await checkImage(exercise.slug, "cardSrc", media.cardSrc, CARD_WIDTH);
+    if (poster && Math.abs(poster.width / poster.height - TARGET_ASPECT) > ASPECT_TOLERANCE) {
+      problems.push(
+        `${exercise.slug}: poster frame is ${poster.width}x${poster.height}, not 16:9.`,
+      );
+    }
     continue;
   }
 
   // A photo is upscaled by object-cover unless it is explicitly letterboxed.
+  const letterboxed = media.fit === "contain";
   const detail = await checkImage(
     exercise.slug,
     "src",
     media.src,
-    media.fit === "contain" ? 0 : DETAIL_WIDTH,
+    letterboxed ? 0 : DETAIL_WIDTH,
   );
 
-  if (detail && media.fit !== "contain" && detail.height > detail.width) {
-    problems.push(
-      `${exercise.slug}: detail photo is portrait (${detail.width}x${detail.height}) and will be heavily cropped in the 16:9 media area.`,
-    );
+  if (detail && !letterboxed) {
+    const aspect = detail.width / detail.height;
+    if (Math.abs(aspect - TARGET_ASPECT) > ASPECT_TOLERANCE) {
+      problems.push(
+        `${exercise.slug}: detail photo is ${detail.width}x${detail.height} (aspect ${aspect.toFixed(2)}), not the shared 16:9 frame — it will be cropped differently from the rest of the library.`,
+      );
+    }
   }
 
   if (media.loopFrame) {
@@ -131,12 +140,17 @@ for (const exercise of EXERCISES) {
   }
 }
 
-for (const [slug, gif] of Object.entries(EXERCISE_CARD_GIFS)) {
-  if (!slugs.has(slug)) {
-    problems.push(`EXERCISE_CARD_GIFS has "${slug}", which is not an exercise slug.`);
-  }
-  if (!gif.startsWith("https://")) {
-    problems.push(`EXERCISE_CARD_GIFS["${slug}"] should be a remote GIF URL.`);
+for (const [slug, media] of Object.entries(EXERCISE_MEDIA)) {
+  for (const [label, src] of [
+    ["src", media.src],
+    ["cardSrc", media.cardSrc],
+    ["loopFrame", media.loopFrame],
+  ] as const) {
+    if (src?.startsWith("http")) {
+      problems.push(
+        `${slug}: ${label} points at a remote URL (${src}) — library media must be served from public/exercises.`,
+      );
+    }
   }
 }
 
