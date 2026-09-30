@@ -30,6 +30,9 @@ export interface ExerciseMediaRecord {
   cardSrc: string;
   /** Second photo frame used to build the detail cross-fade loop. */
   loopFrame?: string;
+  /** Commons source for `loopFrame`, so the second frame stays auditable. */
+  loopSourceTitle?: string;
+  loopSourceUrl?: string;
   /**
    * Set to "contain" when the source is narrower than the media area, so it is
    * letterboxed inside the existing surface instead of being upscaled.
@@ -226,21 +229,6 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     licenseUrl: "https://creativecommons.org/licenses/by/2.0/",
     author: "PTPioneer",
   },
-  "triceps-pushdown": {
-    kind: "photo",
-    src: "/exercises/triceps-pushdown-0.jpg",
-    cardSrc: "/exercises/triceps-pushdown-0.jpg",
-    loopFrame: "/exercises/triceps-pushdown-1.jpg",
-    // 850px wide — narrower than the media area, so it is letterboxed rather
-    // than upscaled. No higher-resolution free asset exists for this lift.
-    fit: "contain",
-    sourceTitle: "Triceps Pushdown (free-exercise-db)",
-    sourceUrl:
-      "https://github.com/yuhonas/free-exercise-db/blob/main/exercises/Triceps_Pushdown/0.jpg",
-    license: "Unlicense (public domain)",
-    licenseUrl: "https://unlicense.org/",
-    author: "free-exercise-db contributors",
-  },
   "barbell-back-squat": {
     kind: "photo",
     src: "/exercises/barbell-back-squat.jpg",
@@ -256,8 +244,11 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     kind: "photo",
     src: "/exercises/kettlebell-front-squat.jpg",
     cardSrc: "/exercises/kettlebell-front-squat.jpg",
-    sourceTitle: "Kettlebell Front Squat 1.jpg",
-    sourceUrl: `${COMMONS_FILE}Kettlebell_Front_Squat_1.jpg`,
+    loopFrame: "/exercises/kettlebell-front-squat-2.jpg",
+    loopSourceTitle: "Kettlebell Front Squat 6 Full Extension.jpg",
+    loopSourceUrl: `${COMMONS_FILE}Kettlebell_Front_Squat_6_Full_Extension.jpg`,
+    sourceTitle: "Kettlebell Front Squat 7 Quarter Down.jpg",
+    sourceUrl: `${COMMONS_FILE}Kettlebell_Front_Squat_7_Quarter_Down.jpg`,
     license: "CC BY-SA 4.0",
     licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
     author: "Taco fleur",
@@ -336,6 +327,16 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     author: "Tiia Monto",
   },
 };
+
+/**
+ * Exercises deliberately left without media.
+ *
+ * Each entry was audited for a reliable, correctly licensed, full-resolution
+ * free asset showing that exact movement. None exists at a resolution that can
+ * fill the media area without upscaling, so these render the ELBODY
+ * placeholder rather than a low-resolution or approximate image.
+ */
+export const EXERCISES_WITHOUT_MEDIA = new Set<string>(["triceps-pushdown"]);
 
 export function getExerciseMedia(slug: string | undefined) {
   return slug ? EXERCISE_MEDIA[slug] : undefined;

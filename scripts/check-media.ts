@@ -15,7 +15,10 @@ import { join } from "node:path";
 import sharp from "sharp";
 
 import { EXERCISES } from "../src/data/exercises";
-import { EXERCISE_MEDIA } from "../src/data/exercise-media";
+import {
+  EXERCISE_MEDIA,
+  EXERCISES_WITHOUT_MEDIA,
+} from "../src/data/exercise-media";
 
 /** The details media area renders at ~976x549; cards at ~240x150. */
 const DETAIL_WIDTH = 976;
@@ -78,12 +81,24 @@ async function checkImage(slug: string, label: string, src: string, minWidth: nu
 
 for (const exercise of EXERCISES) {
   const media = EXERCISE_MEDIA[exercise.slug];
+  const verifiedUnavailable = EXERCISES_WITHOUT_MEDIA.has(exercise.slug);
+
+  if (!media && verifiedUnavailable) {
+    // Declared as audited and intentionally placeholder-only.
+    continue;
+  }
 
   if (!media) {
     problems.push(
-      `${exercise.slug}: no media record — the details page will show the placeholder.`,
+      `${exercise.slug}: no media record and no EXERCISES_WITHOUT_MEDIA entry — the details page will show the placeholder.`,
     );
     continue;
+  }
+
+  if (verifiedUnavailable) {
+    problems.push(
+      `${exercise.slug}: listed in EXERCISES_WITHOUT_MEDIA but still has a media record.`,
+    );
   }
 
   if (!media.sourceUrl || !media.license || !media.author) {
@@ -160,6 +175,14 @@ for (const slug of Object.keys(EXERCISE_MEDIA)) {
   }
 }
 
+for (const slug of EXERCISES_WITHOUT_MEDIA) {
+  if (!slugs.has(slug)) {
+    problems.push(
+      `EXERCISES_WITHOUT_MEDIA has "${slug}", which is not an exercise slug.`,
+    );
+  }
+}
+
 if (problems.length > 0) {
   console.error("Media check failed:\n");
   for (const problem of problems) console.error(`  - ${problem}`);
@@ -167,8 +190,9 @@ if (problems.length > 0) {
 }
 
 const videoCount = Object.values(EXERCISE_MEDIA).filter((m) => m.kind === "video").length;
+const placeholderCount = EXERCISES_WITHOUT_MEDIA.size;
 console.log(
-  `Media check passed: ${EXERCISES.length} exercises, all with media (${videoCount} video, ${
-    EXERCISES.length - videoCount
-  } photo).`,
+  `Media check passed: ${EXERCISES.length} exercises — ${videoCount} video, ${
+    EXERCISES.length - videoCount - placeholderCount
+  } photo, ${placeholderCount} verified-unavailable (placeholder).`,
 );

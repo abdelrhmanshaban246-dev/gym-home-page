@@ -18,7 +18,10 @@ import { join } from "node:path";
 
 import sharp from "sharp";
 
-import { EXERCISE_MEDIA } from "../src/data/exercise-media";
+import {
+  EXERCISE_MEDIA,
+  EXERCISES_WITHOUT_MEDIA,
+} from "../src/data/exercise-media";
 
 /** The details media area renders at ~976px wide; stay above it, never below. */
 const MAX_IMAGE_WIDTH = 1400;
@@ -156,6 +159,10 @@ async function main() {
   for (const [slug, media] of Object.entries(EXERCISE_MEDIA)) {
     const fileName = commonsFileName(media.sourceUrl);
 
+    if (EXERCISES_WITHOUT_MEDIA.has(slug)) {
+      continue;
+    }
+
     try {
       if (!fileName) {
         // Non-Commons source (free-exercise-db): fetch each frame directly.
@@ -216,6 +223,22 @@ async function main() {
           info.lumaShift
         })${fits ? "" : " TOO NARROW"}`,
       );
+
+      if (media.loopFrame && media.loopSourceUrl) {
+        const loopFileName = commonsFileName(media.loopSourceUrl);
+        if (!loopFileName) {
+          throw new Error(`${slug}: loopFrame has no resolvable source URL`);
+        }
+        const loopOriginal = await download(
+          `https://commons.wikimedia.org/wiki/Special:FilePath/${loopFileName}`,
+        );
+        const loopInfo = await writeImage(loopOriginal, outputPath(media.loopFrame), {
+          crop: media.fit !== "contain",
+        });
+        console.log(
+          `${slug.padEnd(22)} loop frame ${loopInfo.width}x${loopInfo.height}`,
+        );
+      }
     } catch (error) {
       failures.push(`${slug}: ${(error as Error).message}`);
     }
