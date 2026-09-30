@@ -1,5 +1,11 @@
 import { Dumbbell, Instagram, Mail } from "lucide-react";
 import type { ComponentType } from "react";
+import { EXERCISE_MEDIA } from "@/data/exercise-media";
+
+/** Distinct licences actually used by the exercise media, for attribution. */
+const MEDIA_CREDITS = Array.from(
+  new Set(Object.values(EXERCISE_MEDIA).map((media) => media.license)),
+).join(", ");
 
 const FOOTER_LINKS: {
   heading: string;
@@ -81,6 +87,30 @@ export function Footer() {
             </div>
           ))}
         </div>
+
+        {/* Media attribution */}
+        <p className="mt-8 text-xs leading-relaxed text-muted-foreground/70">
+          Exercise media from{" "}
+          <a
+            href="https://commons.wikimedia.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+          >
+            Wikimedia Commons
+          </a>{" "}
+          ({MEDIA_CREDITS}) and{" "}
+          <a
+            href="https://github.com/yuhonas/free-exercise-db"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+          >
+            free-exercise-db
+          </a>
+          . Images and clips are used unmodified under the terms of their
+          respective licences.
+        </p>
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border/60 pt-6 sm:flex-row">

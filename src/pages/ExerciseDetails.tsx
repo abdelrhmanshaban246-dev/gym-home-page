@@ -5,6 +5,7 @@ import {
   Gauge,
   Lightbulb,
   ListChecks,
+  SignalHigh,
 } from "lucide-react";
 import { Link, Navigate, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -14,9 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ExercisePhotoLoop } from "@/components/exercises/ExercisePhotoLoop";
+import { ExerciseDetailMedia } from "@/components/exercises/ExerciseMedia";
 import { getExerciseBySlug } from "@/data/exercises";
-import { getExercisePhotoLoop } from "@/data/exercise-photos";
 
 function DetailList({
   items,
@@ -46,8 +46,6 @@ export default function ExerciseDetails() {
   if (!exercise) {
     return <Navigate to="/#exercises" replace />;
   }
-
-  const hasPhotoLoop = Boolean(getExercisePhotoLoop(exercise.name));
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -81,11 +79,20 @@ export default function ExerciseDetails() {
             <h1 className="font-display text-4xl uppercase leading-tight sm:text-5xl">
               {exercise.name}
             </h1>
-            <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Gauge className="size-4 text-primary" />
-              Target muscle:{" "}
-              <span className="font-semibold text-foreground">
-                {exercise.muscle}
+            <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+              <span className="flex items-center gap-2">
+                <Gauge className="size-4 text-primary" />
+                Target muscle:{" "}
+                <span className="font-semibold text-foreground">
+                  {exercise.muscle}
+                </span>
+              </span>
+              <span className="flex items-center gap-2">
+                <SignalHigh className="size-4 text-primary" />
+                Difficulty:{" "}
+                <span className="font-semibold text-foreground">
+                  {exercise.difficulty}
+                </span>
               </span>
             </p>
           </div>
@@ -104,22 +111,25 @@ export default function ExerciseDetails() {
               aria-hidden
               className="absolute -bottom-24 -left-20 size-72 rounded-full bg-primary/10 blur-3xl"
             />
-            <ExercisePhotoLoop name={exercise.name} />
-            {!hasPhotoLoop && (
-              <div className="relative flex flex-col items-center gap-4 px-6 text-center">
-                <span className="flex size-16 items-center justify-center rounded-2xl border border-primary/25 bg-background/70 text-primary backdrop-blur-sm">
-                  <Dumbbell className="size-7" />
-                </span>
-                <div>
-                  <p className="font-display text-lg uppercase tracking-[0.2em]">
-                    Media Placeholder
-                  </p>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Exercise video and image content will appear here.
-                  </p>
+            <ExerciseDetailMedia
+              slug={exercise.slug}
+              name={exercise.name}
+              fallback={
+                <div className="relative flex flex-col items-center gap-4 px-6 text-center">
+                  <span className="flex size-16 items-center justify-center rounded-2xl border border-primary/25 bg-background/70 text-primary backdrop-blur-sm">
+                    <Dumbbell className="size-7" />
+                  </span>
+                  <div>
+                    <p className="font-display text-lg uppercase tracking-[0.2em]">
+                      Media Placeholder
+                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Exercise video and image content will appear here.
+                    </p>
+                  </div>
                 </div>
-              </div>
-            )}
+              }
+            />
           </div>
         </div>
       </section>

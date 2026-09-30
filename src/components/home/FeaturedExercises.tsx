@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Dumbbell, Gauge } from "lucide-react";
+import { ArrowUpRight, Gauge } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ExerciseMedia } from "@/components/exercises/ExerciseMedia";
+import { ExerciseCardMedia } from "@/components/exercises/ExerciseMedia";
 import { SectionHeading } from "@/components/home/SectionHeading";
 import {
   EXERCISES,
@@ -70,7 +70,7 @@ export function FeaturedExercises() {
             {visibleExercises.map((exercise, index) => (
               <motion.div
                 layout
-                key={exercise.name}
+                key={exercise.slug}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
@@ -82,18 +82,9 @@ export function FeaturedExercises() {
               >
                 <Card className="group h-full overflow-hidden border-border/70 bg-card/80 py-0 transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/10">
                   <CardHeader className="p-0 pb-0">
-                    <ExerciseMedia
+                    <ExerciseCardMedia
+                      slug={exercise.slug}
                       name={exercise.name}
-                      fallback={
-                        <div className="relative flex flex-col items-center gap-3 px-4 text-center">
-                          <span className="flex size-14 items-center justify-center rounded-2xl border border-primary/25 bg-background/60 text-primary shadow-lg shadow-black/20 backdrop-blur-sm">
-                            <Dumbbell className="size-6" />
-                          </span>
-                          <span className="font-display text-sm uppercase tracking-[0.18em] text-muted-foreground/70">
-                            {exercise.name}
-                          </span>
-                        </div>
-                      }
                     />
                   </CardHeader>
                   <CardContent className="p-5">
