@@ -160,6 +160,9 @@ function PhotoLoop({
 /**
  * Details page media: the exercise's own 720p demonstration clip, or its
  * high-resolution photograph cross-faded between the start and end position.
+ *
+ * Callers should pass `key={slug}` so a failed load or an in-flight loop frame
+ * is discarded when moving between exercises on the same route.
  */
 export function ExerciseDetailMedia({
   slug,

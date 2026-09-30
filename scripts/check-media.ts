@@ -26,7 +26,7 @@ const CARD_WIDTH = 240;
 const MIN_VIDEO_BYTES = 50_000;
 const MIN_IMAGE_BYTES = 5_000;
 
-const PUBLIC_DIR = join(import.meta.dir, "..", "public");
+const PUBLIC_DIR = join(process.cwd(), "public");
 
 const problems: string[] = [];
 const slugs = new Set(EXERCISES.map((exercise) => exercise.slug));
@@ -63,7 +63,7 @@ async function checkImage(slug: string, label: string, src: string, minWidth: nu
     return;
   }
 
-  if (width < minWidth && !(label === "src" && minWidth === DETAIL_WIDTH)) {
+  if (width < minWidth) {
     problems.push(
       `${slug}: ${label} is ${width}px wide, below the ${minWidth}px it renders at (${src}).`,
     );

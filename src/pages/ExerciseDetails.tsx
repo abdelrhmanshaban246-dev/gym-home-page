@@ -112,6 +112,7 @@ export default function ExerciseDetails() {
               className="absolute -bottom-24 -left-20 size-72 rounded-full bg-primary/10 blur-3xl"
             />
             <ExerciseDetailMedia
+              key={exercise.slug}
               slug={exercise.slug}
               name={exercise.name}
               fallback={

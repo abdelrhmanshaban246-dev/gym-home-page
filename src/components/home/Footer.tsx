@@ -108,8 +108,9 @@ export function Footer() {
           >
             free-exercise-db
           </a>
-          . Images and clips are used unmodified under the terms of their
-          respective licences.
+          . Photographs are resized and re-encoded for display; clips are shown
+          as published. Each asset is credited to its author under the licence
+          shown above.
         </p>
 
         {/* Bottom bar */}

@@ -13,7 +13,7 @@
  *  - Downloads are validated (magic bytes, minimum size) so an error page can
  *    never be committed as if it were media.
  */
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 import sharp from "sharp";
@@ -29,7 +29,7 @@ const MIN_IMAGE_BYTES = 5_000;
 const USER_AGENT =
   "ElbodyFitnessSite/1.0 (https://commons.wikimedia.org/wiki/User:Anon; elbody-media-fetch@example.org) bun-fetch";
 
-const PUBLIC_DIR = join(import.meta.dir, "..", "public");
+const PUBLIC_DIR = join(process.cwd(), "public");
 
 function outputPath(src: string) {
   return join(PUBLIC_DIR, src.replace(/^\//, ""));
@@ -95,7 +95,7 @@ async function writeImage(source: Buffer, target: string) {
   if (data.length < MIN_IMAGE_BYTES) {
     throw new Error(`${target}: produced only ${data.length} bytes`);
   }
-  await Bun.write(target, data);
+  await writeFile(target, data);
   return info;
 }
 
@@ -132,7 +132,7 @@ async function main() {
           `https://commons.wikimedia.org/wiki/Special:FilePath/${fileName}`,
         );
         assertWebm(buffer, slug);
-        await Bun.write(outputPath(media.src), buffer);
+        await writeFile(outputPath(media.src), buffer);
 
         const poster = await download(
           `https://commons.wikimedia.org/wiki/Special:FilePath/${fileName}?width=${POSTER_WIDTH}`,
