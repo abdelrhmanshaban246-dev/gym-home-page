@@ -51,7 +51,10 @@ export function Footer() {
   return (
     <footer id="contact" className="scroll-mt-20 border-t border-border/60 bg-card/40">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        {/* Only the brand block and the "Explore" column exist, so the grid
+            declares exactly two tracks. The previous four-column template left
+            two permanently empty tracks on desktop and tablet. */}
+        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr]">
           {/* Brand */}
           <div>
             <a href="#top" className="flex items-center gap-2">

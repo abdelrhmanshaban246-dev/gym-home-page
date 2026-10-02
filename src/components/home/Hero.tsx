@@ -153,7 +153,7 @@ export function Hero() {
             key="elbody-profile-hero"
             src={profileImage}
             alt="ELBODY certified personal fitness coach"
-            className="block h-auto w-auto max-h-[62svh] max-w-none select-none object-contain object-bottom drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)] sm:max-h-[74svh]"
+            className="block h-auto w-auto max-h-[62svh] max-w-full select-none object-contain object-bottom drop-shadow-[0_18px_40px_rgba(0,0,0,0.45)] sm:max-h-[74svh] lg:max-w-none"
             width={1672}
             height={941}
             loading="eager"
