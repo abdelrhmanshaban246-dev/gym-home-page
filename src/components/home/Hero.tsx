@@ -110,12 +110,15 @@ export function Hero() {
               </a>
             </Button>
             <Button
+              asChild
               size="lg"
               variant="outline"
               className="h-12 border-border px-8 font-bold uppercase tracking-wider hover:bg-accent"
             >
-              <Play className="size-4" />
-              View Workouts
+              <a href="#programs">
+                <Play className="size-4" />
+                View Workouts
+              </a>
             </Button>
           </motion.div>
 

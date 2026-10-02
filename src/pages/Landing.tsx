@@ -5,6 +5,7 @@ import { Navbar } from "@/components/home/Navbar";
 import { Hero } from "@/components/home/Hero";
 import { FeaturedExercises } from "@/components/home/FeaturedExercises";
 import { WorkoutPrograms } from "@/components/home/WorkoutPrograms";
+import { Coaching } from "@/components/home/Coaching";
 import { Footer } from "@/components/home/Footer";
 
 const WHATSAPP_URL = "https://wa.me/201023604423";
@@ -23,6 +24,7 @@ export default function Landing() {
         <Hero />
         <FeaturedExercises />
         <WorkoutPrograms />
+        <Coaching />
 
         {/* Final CTA band */}
         <section className="border-t border-border/60 bg-card/40 py-16 sm:py-20">
