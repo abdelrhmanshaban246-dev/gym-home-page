@@ -272,15 +272,15 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     author: "Herasna",
   },
   "barbell-back-squat": {
-    kind: "photo",
-    src: "/exercises/barbell-back-squat.jpg",
+    kind: "youtube",
+    src: "https://www.youtube.com/embed/AMpLUefTQrM",
     cardSrc: "/exercises/barbell-back-squat.jpg",
-    sourceTitle:
-      "Woman doing squat workout in gym with barbell, back view.jpg",
-    sourceUrl: `${COMMONS_FILE}Woman_doing_squat_workout_in_gym_with_barbell,_back_view.jpg`,
-    license: "CC BY 2.0",
-    licenseUrl: "https://creativecommons.org/licenses/by/2.0/",
-    author: "Nenad Stojkovic",
+    youtubeId: "AMpLUefTQrM",
+    sourceTitle: "Barbell Back Squat",
+    sourceUrl: "https://www.youtube.com/watch?v=AMpLUefTQrM",
+    license: "YouTube (embedded by permission)",
+    licenseUrl: "https://www.youtube.com/watch?v=AMpLUefTQrM",
+    author: "Louie Mendoza",
   },
   "kettlebell-front-squat": {
     kind: "youtube",
