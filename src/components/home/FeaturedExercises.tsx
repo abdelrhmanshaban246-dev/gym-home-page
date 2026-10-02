@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Gauge } from "lucide-react";
+import { ArrowUpRight, Gauge, Search, X } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -15,11 +16,34 @@ import { SectionHeading } from "@/components/home/SectionHeading";
 import {
   EXERCISES,
   MUSCLE_GROUPS,
+  type Exercise,
   type MuscleGroup,
 } from "@/data/exercises";
 
+/**
+ * Lower-cased haystack of the fields a visitor would reasonably search by.
+ * Only existing data is used — nothing is added to the dataset. `groups` is
+ * included so the search agrees with the category filters (e.g. "cardio").
+ */
+function buildSearchHaystack(exercise: Exercise): string {
+  return [
+    exercise.name,
+    exercise.muscle,
+    exercise.difficulty,
+    ...exercise.equipment,
+    ...exercise.groups,
+  ]
+    .join(" ")
+    .toLowerCase();
+}
+
+function matchesSearch(exercise: Exercise, term: string): boolean {
+  return buildSearchHaystack(exercise).includes(term);
+}
+
 export function FeaturedExercises() {
   const [selectedGroup, setSelectedGroup] = useState<MuscleGroup>("All");
+  const [query, setQuery] = useState("");
   const { hash } = useLocation();
 
   // The exercise details page returns to `/#exercises`, but a client-side
@@ -36,14 +60,24 @@ export function FeaturedExercises() {
       ?.scrollIntoView({ block: "start" });
   }, [hash]);
 
-  const visibleExercises =
-    selectedGroup === "All"
-      ? EXERCISES
-      : EXERCISES.filter((exercise) =>
-          exercise.groups.includes(
-            selectedGroup as Exclude<MuscleGroup, "All">,
-          ),
-        );
+  // Trim + lower-case once so leading/trailing spaces and casing never
+  // affect matching. An empty term means "no search constraint".
+  const searchTerm = query.trim().toLowerCase();
+
+  // Derived list — the original dataset is never mutated. Category filtering
+  // and search are independent constraints applied together, so an empty
+  // search preserves the existing per-category results exactly.
+  const visibleExercises = EXERCISES.filter((exercise) => {
+    const matchesGroup =
+      selectedGroup === "All" ||
+      exercise.groups.includes(selectedGroup as Exclude<MuscleGroup, "All">);
+
+    if (!matchesGroup) {
+      return false;
+    }
+
+    return searchTerm === "" || matchesSearch(exercise, searchTerm);
+  });
 
   return (
     <section id="exercises" className="scroll-mt-20 py-20 sm:py-24">
@@ -54,10 +88,36 @@ export function FeaturedExercises() {
           description="Explore foundational exercises by target muscle. Each entry pairs the exercise demonstration with step-by-step coaching guidance."
         />
 
+        <div className="relative mt-10 max-w-md">
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden="true"
+          />
+          <Input
+            id="exercise-search"
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Search exercises..."
+            aria-label="Search exercises by name, muscle, equipment, or difficulty"
+            className="border-border/70 bg-card/60 pl-9 text-sm focus-visible:border-primary/60 focus-visible:ring-primary/30 [&::-webkit-search-cancel-button]:hidden"
+          />
+          {query.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Clear exercise search"
+              className="absolute right-2.5 top-1/2 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+            >
+              <X className="size-4" aria-hidden="true" />
+            </button>
+          )}
+        </div>
+
         <div
           role="group"
           aria-label="Filter exercises by muscle group"
-          className="mt-10 flex flex-wrap gap-2"
+          className="mt-6 flex flex-wrap gap-2"
         >
           {MUSCLE_GROUPS.map((group) => {
             const isSelected = selectedGroup === group;
@@ -80,7 +140,28 @@ export function FeaturedExercises() {
           })}
         </div>
 
-        <motion.div layout className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {/* Screen-reader result count, so typing announces feedback without
+            changing the visual design. */}
+        <p className="sr-only" role="status">
+          {visibleExercises.length} exercise
+          {visibleExercises.length === 1 ? "" : "s"} found
+        </p>
+
+        {visibleExercises.length === 0 && (
+          <div className="mt-8 rounded-lg border border-border/70 bg-card/60 px-4 py-16 text-center">
+            <p className="font-display text-xl uppercase tracking-wide text-foreground">
+              No exercises found.
+            </p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Try a different search or filter.
+            </p>
+          </div>
+        )}
+
+        <motion.div
+          layout
+          className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        >
           <AnimatePresence mode="popLayout">
             {visibleExercises.map((exercise, index) => (
               <motion.div
