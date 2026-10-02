@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Dumbbell, Flame, HeartPulse } from "lucide-react";
+import { ArrowUpRight, Dumbbell, Flame, HeartPulse } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,6 +14,8 @@ interface Program {
   title: string;
   description: string;
   icon: typeof Dumbbell;
+  /** The program this teaser opens in the full programs experience. */
+  programSlug: string;
 }
 
 const PROGRAMS: Program[] = [
@@ -21,18 +24,21 @@ const PROGRAMS: Program[] = [
     description:
       "Progressive heavy lifting focused on the big compound lifts. Build raw, functional power week after week.",
     icon: Dumbbell,
+    programSlug: "legs-quads-hamstrings-glutes",
   },
   {
     title: "Muscle Building",
     description:
       "Structured hypertrophy training with smart volume and recovery programming to pack on lean size.",
     icon: Flame,
+    programSlug: "push-chest-shoulders-triceps",
   },
   {
     title: "Fat Loss",
     description:
       "Metabolic conditioning combined with strength work to burn fat while keeping every ounce of muscle.",
     icon: HeartPulse,
+    programSlug: "fat-loss-conditioning",
   },
 ];
 
@@ -49,7 +55,7 @@ export function WorkoutPrograms() {
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {PROGRAMS.map((program, i) => (
             <motion.div
-              key={program.title}
+              key={program.programSlug}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -74,15 +80,33 @@ export function WorkoutPrograms() {
                     {program.description}
                   </p>
                   <Button
+                    asChild
                     variant="outline"
                     className="w-full border-border font-semibold uppercase tracking-wide group-hover:border-primary/50 group-hover:text-primary"
                   >
-                    Learn More
+                    <Link to={`/workout-programs/${program.programSlug}`}>
+                      View Program
+                      <ArrowUpRight className="size-4" aria-hidden />
+                      <span className="sr-only">: {program.title}</span>
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
             </motion.div>
           ))}
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <Button
+            asChild
+            variant="outline"
+            className="border-border font-semibold uppercase tracking-wide hover:border-primary/50 hover:text-primary"
+          >
+            <Link to="/workout-programs">
+              View All Programs
+              <ArrowUpRight className="size-4" aria-hidden />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

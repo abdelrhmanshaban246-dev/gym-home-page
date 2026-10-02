@@ -12,6 +12,10 @@ import "./index.css";
 // Lazy load route components for better code splitting
 const Landing = lazy(() => import("./pages/Landing.tsx"));
 const ExerciseDetails = lazy(() => import("./pages/ExerciseDetails.tsx"));
+const WorkoutPrograms = lazy(() => import("./pages/WorkoutPrograms.tsx"));
+const WorkoutProgramDetails = lazy(() =>
+  import("./pages/WorkoutProgramDetails.tsx"),
+);
 const AuthPage = lazy(() => import("./pages/Auth.tsx"));
 const Dashboard = lazy(() => import("./pages/Dashboard.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
@@ -132,6 +136,11 @@ createRoot(document.getElementById("root")!).render(
                 }
               />
               <Route path="/exercises/:exerciseSlug" element={<ExerciseDetails />} />
+              <Route path="/workout-programs" element={<WorkoutPrograms />} />
+              <Route
+                path="/workout-programs/:programSlug"
+                element={<WorkoutProgramDetails />}
+              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
