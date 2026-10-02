@@ -7,7 +7,7 @@ import {
   ListChecks,
   SignalHigh,
 } from "lucide-react";
-import { Link, Navigate, useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -44,7 +44,58 @@ export default function ExerciseDetails() {
   const exercise = exerciseSlug ? getExerciseBySlug(exerciseSlug) : undefined;
 
   if (!exercise) {
-    return <Navigate to="/#exercises" replace />;
+    // An unknown slug used to redirect straight to the library, which made a
+    // broken link indistinguishable from a normal "Back to Exercises" click.
+    // State it instead, and keep the same header and call to action so the
+    // visitor has one obvious way out.
+    return (
+      <main className="flex min-h-screen flex-col bg-background text-foreground">
+        <div className="border-b border-border/60 bg-card/30">
+          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
+            <Link to="/#exercises" className="flex items-center gap-2">
+              <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
+                <Dumbbell className="size-4.5" />
+              </span>
+              <span className="font-display text-xl tracking-wide">ELBODY</span>
+            </Link>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/#exercises">
+                <ArrowLeft className="size-4" />
+                Back to Exercises
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        <section className="flex flex-1 items-center justify-center px-4 py-20 sm:py-24">
+          <div className="relative mx-auto max-w-xl text-center">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
+              404
+            </p>
+            <h1 className="mt-3 font-display text-4xl uppercase leading-tight sm:text-5xl">
+              Exercise Not Found
+            </h1>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              We could not find an exercise with that address. It may have been
+              renamed or removed from the library.
+            </p>
+            <div className="mt-10 flex flex-wrap justify-center gap-3">
+              <Button asChild size="lg" className="h-12 px-8 font-bold uppercase tracking-wider">
+                <Link to="/#exercises">
+                  <ArrowLeft className="size-4" />
+                  Back to Exercises
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="h-12 px-8 font-bold uppercase tracking-wider">
+                <Link to="/">
+                  Go to Home
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
   }
 
   return (
