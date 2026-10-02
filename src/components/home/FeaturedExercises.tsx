@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Gauge } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,6 +20,21 @@ import {
 
 export function FeaturedExercises() {
   const [selectedGroup, setSelectedGroup] = useState<MuscleGroup>("All");
+  const { hash } = useLocation();
+
+  // The exercise details page returns to `/#exercises`, but a client-side
+  // navigation never triggers the browser's own fragment scroll, so the visitor
+  // would land on the hero instead of the library. `scroll-mt-20` on the section
+  // keeps the heading clear of the sticky navbar.
+  useEffect(() => {
+    if (hash !== "#exercises") {
+      return;
+    }
+
+    document
+      .getElementById("exercises")
+      ?.scrollIntoView({ block: "start" });
+  }, [hash]);
 
   const visibleExercises =
     selectedGroup === "All"

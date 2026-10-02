@@ -98,19 +98,28 @@ export function Footer() {
             className="underline decoration-border underline-offset-4 transition-colors hover:text-primary"
           >
             Wikimedia Commons
-          </a>{" "}
-          ({MEDIA_CREDITS}) and{" "}
+          </a>
+          ,{" "}
           <a
-            href="https://github.com/yuhonas/free-exercise-db"
+            href="https://mixkit.co/license/"
             target="_blank"
             rel="noopener noreferrer"
             className="underline decoration-border underline-offset-4 transition-colors hover:text-primary"
           >
-            free-exercise-db
-          </a>
-          . Photographs are resized and re-encoded for display; clips are shown
-          as published. Each asset is credited to its author under the licence
-          shown above.
+            Mixkit
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://www.youtube.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+          >
+            YouTube
+          </a>{" "}
+          . Photographs are resized and re-encoded for display; clips are shown as
+          published. Licences in use: {MEDIA_CREDITS}. Each asset is credited to
+          its author under the licence listed above.
         </p>
 
         {/* Bottom bar */}
