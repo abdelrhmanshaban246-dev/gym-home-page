@@ -164,7 +164,9 @@ async function main() {
   for (const [slug, media] of Object.entries(EXERCISE_MEDIA)) {
     const fileName = commonsFileName(media.sourceUrl);
 
-    if (EXERCISES_WITHOUT_MEDIA.has(slug)) {
+    if (EXERCISES_WITHOUT_MEDIA.has(slug) || media.kind === "youtube") {
+      // youtube players are embedded remotely and the card still is committed
+      // alongside them, so there is nothing to download.
       continue;
     }
 

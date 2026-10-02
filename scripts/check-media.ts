@@ -117,6 +117,23 @@ for (const exercise of EXERCISES) {
     problems.push(`${exercise.slug}: media record is missing attribution fields.`);
   }
 
+  if (media.kind === "youtube") {
+    // The player is a remote YouTube embed, so only the card still is local.
+    if (!media.youtubeId || !/^[\w-]{6,20}$/.test(media.youtubeId)) {
+      problems.push(
+        `${exercise.slug}: youtube record needs a valid youtubeId (got ${media.youtubeId}).`,
+      );
+    }
+
+    const poster = await checkImage(exercise.slug, "cardSrc", media.cardSrc, CARD_WIDTH);
+    if (poster && Math.abs(poster.width / poster.height - TARGET_ASPECT) > ASPECT_TOLERANCE) {
+      problems.push(
+        `${exercise.slug}: poster frame is ${poster.width}x${poster.height}, not 16:9.`,
+      );
+    }
+    continue;
+  }
+
   if (media.kind === "video") {
     const file = join(PUBLIC_DIR, media.src.replace(/^\//, ""));
     if (!existsSync(file)) {
@@ -171,6 +188,10 @@ for (const [slug, media] of Object.entries(EXERCISE_MEDIA)) {
     ["cardSrc", media.cardSrc],
     ["loopFrame", media.loopFrame],
   ] as const) {
+    // A youtube record's `src` is the canonical embed URL, so only the stills
+    // have to be served from public/exercises.
+    if (label === "src" && media.kind === "youtube") continue;
+
     if (src?.startsWith("http")) {
       problems.push(
         `${slug}: ${label} points at a remote URL (${src}) — library media must be served from public/exercises.`,
@@ -199,10 +220,10 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-const videoCount = Object.values(EXERCISE_MEDIA).filter((m) => m.kind === "video").length;
+const records = Object.values(EXERCISE_MEDIA);
+const videoCount = records.filter((m) => m.kind !== "photo").length;
+const photoCount = records.filter((m) => m.kind === "photo").length;
 const placeholderCount = EXERCISES_WITHOUT_MEDIA.size;
 console.log(
-  `Media check passed: ${EXERCISES.length} exercises — ${videoCount} video, ${
-    EXERCISES.length - videoCount - placeholderCount
-  } photo, ${placeholderCount} verified-unavailable (placeholder).`,
+  `Media check passed: ${EXERCISES.length} exercises — ${videoCount} video, ${photoCount} photo, ${placeholderCount} verified-unavailable (placeholder).`,
 );

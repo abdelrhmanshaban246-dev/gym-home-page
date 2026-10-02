@@ -9,7 +9,10 @@
  *    wide (never upscaled) and levelled toward a common luminance so no
  *    exercise is dramatically darker or brighter than the rest;
  *  - `video` entries loop a 1280x720 demonstration clip and use a 16:9 poster
- *    frame on the card.
+ *    frame on the card;
+ *  - `youtube` entries embed the official YouTube demonstration on the details
+ *    page and reuse that video's own 16:9 thumbnail as the card still, so the
+ *    card grid stays a grid of stills and nothing has to be re-hosted.
  *
  * The only exception is an asset explicitly marked `fit: "contain"`, which is
  * letterboxed rather than cropped or upscaled.
@@ -20,9 +23,10 @@
  *  - free-exercise-db photographs (Unlicense / public domain).
  *  - Mixkit demonstration clips (Mixkit Stock Video Free License), downloaded
  *    from `assetUrl` rather than Commons.
+ *  - YouTube demonstrations (kind: "youtube"), credited to the channel.
  */
 
-export type ExerciseMediaKind = "video" | "photo";
+export type ExerciseMediaKind = "video" | "photo" | "youtube";
 
 export interface ExerciseMediaRecord {
   kind: ExerciseMediaKind;
@@ -47,6 +51,11 @@ export interface ExerciseMediaRecord {
   assetUrl?: string;
   /** Poster frame download URL, paired with `assetUrl`. */
   posterUrl?: string;
+  /**
+   * YouTube video id for `kind: "youtube"` records. `src` holds the canonical
+   * embed URL; this is what the player component actually needs.
+   */
+  youtubeId?: string;
   sourceTitle: string;
   sourceUrl: string;
   license: string;
@@ -244,6 +253,17 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     licenseUrl: "https://creativecommons.org/licenses/by/2.0/",
     author: "PTPioneer",
   },
+  "triceps-pushdown": {
+    kind: "youtube",
+    src: "https://www.youtube.com/embed/9euK-0PL358",
+    cardSrc: "/exercises/triceps-pushdown-poster.jpg",
+    youtubeId: "9euK-0PL358",
+    sourceTitle: "How To Do Triceps Rope Pushdown Correctly | Build Bigger Arms",
+    sourceUrl: "https://www.youtube.com/watch?v=9euK-0PL358",
+    license: "YouTube (embedded by permission)",
+    licenseUrl: "https://www.youtube.com/watch?v=9euK-0PL358",
+    author: "Herasna",
+  },
   "barbell-back-squat": {
     kind: "photo",
     src: "/exercises/barbell-back-squat.jpg",
@@ -359,7 +379,7 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
  * fill the media area without upscaling, so these render the ELBODY
  * placeholder rather than a low-resolution or approximate image.
  */
-export const EXERCISES_WITHOUT_MEDIA = new Set<string>(["triceps-pushdown"]);
+export const EXERCISES_WITHOUT_MEDIA = new Set<string>([]);
 
 export function getExerciseMedia(slug: string | undefined) {
   return slug ? EXERCISE_MEDIA[slug] : undefined;

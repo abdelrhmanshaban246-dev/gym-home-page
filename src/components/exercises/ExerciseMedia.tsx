@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useReducedMotion } from "framer-motion";
 import { Dumbbell } from "lucide-react";
+import { YouTubeEmbed } from "@/components/exercises/YouTubeEmbed";
 import {
   getExerciseCardMedia,
   getExerciseMedia,
@@ -156,8 +157,9 @@ function PhotoLoop({
 }
 
 /**
- * Details page media: the exercise's own 720p demonstration clip, or its
- * high-resolution photograph cross-faded between the start and end position.
+ * Details page media: the exercise's own 720p demonstration clip, the embedded
+ * YouTube demonstration, or its high-resolution photograph cross-faded between
+ * the start and end position.
  *
  * Callers should pass `key={slug}` so a failed load or an in-flight loop frame
  * is discarded when moving between exercises on the same route.
@@ -176,6 +178,10 @@ export function ExerciseDetailMedia({
 
   if (!media || failed) {
     return <>{fallback}</>;
+  }
+
+  if (media.kind === "youtube" && media.youtubeId) {
+    return <YouTubeEmbed videoId={media.youtubeId} title={`${name} demonstration`} />;
   }
 
   return (
