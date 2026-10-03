@@ -18,6 +18,7 @@ import {
 import { ExerciseDetailMedia } from "@/components/exercises/ExerciseMedia";
 import { Footer } from "@/components/home/Footer";
 import { getExerciseBySlug } from "@/data/exercises";
+import { useSeo } from "@/lib/seo";
 
 function DetailList({
   items,
@@ -43,6 +44,16 @@ function DetailList({
 export default function ExerciseDetails() {
   const { exerciseSlug } = useParams<{ exerciseSlug: string }>();
   const exercise = exerciseSlug ? getExerciseBySlug(exerciseSlug) : undefined;
+
+  // Descriptions are built from the exercise's own data, so they always match
+  // what the page actually shows. An unknown slug is never indexed.
+  useSeo({
+    title: exercise ? `${exercise.name} Exercise` : "Exercise Not Found",
+    description: exercise
+      ? `Learn how to perform the ${exercise.name} exercise for the ${exercise.muscle}. Step-by-step instructions, common mistakes to avoid, and coaching tips from ELBODY.`
+      : "This exercise could not be found. Browse the ELBODY exercise library for demonstrations and step-by-step technique guidance.",
+    indexable: Boolean(exercise),
+  });
 
   if (!exercise) {
     // An unknown slug used to redirect straight to the library, which made a

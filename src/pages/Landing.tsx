@@ -7,10 +7,17 @@ import { FeaturedExercises } from "@/components/home/FeaturedExercises";
 import { WorkoutPrograms } from "@/components/home/WorkoutPrograms";
 import { Coaching } from "@/components/home/Coaching";
 import { Footer } from "@/components/home/Footer";
+import { useSeo } from "@/lib/seo";
 
 const WHATSAPP_URL = "https://wa.me/201023604423";
 
 export default function Landing() {
+  useSeo({
+    title: "Personal Fitness Coaching",
+    description:
+      "ELBODY is Abdelrhman's personal fitness coaching: a library of 28 exercises with technique cues, complete workout programs for strength, muscle and fat loss, and one-to-one coaching on WhatsApp.",
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

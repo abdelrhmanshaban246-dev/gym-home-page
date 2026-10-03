@@ -3,8 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
 import { LayoutDashboard, LogOut } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useSeo } from "@/lib/seo";
 
 export default function Dashboard() {
+  // A private workspace: never indexed.
+  useSeo({
+    title: "Dashboard",
+    description: "Your private ELBODY account dashboard, with your training workspace and progress.",
+    indexable: false,
+  });
+
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
 

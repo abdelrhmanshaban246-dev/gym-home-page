@@ -1,11 +1,11 @@
 {
-  "name": "freebuff.com application",
-  "short_name": "freebuff.com",
-  "description": "freebuff.com application",
+  "name": "ELBODY — Personal Fitness Coaching",
+  "short_name": "ELBODY",
+  "description": "ELBODY is Abdelrhman's personal fitness coaching: exercise library, workout programs and one-to-one coaching.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#181818",
+  "theme_color": "#181818",
   "icons": [
     {
       "src": "/logo.svg",

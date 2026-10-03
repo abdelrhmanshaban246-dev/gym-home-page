@@ -6,7 +6,39 @@
   <link rel="icon" type="image/svg+xml" href="/logo.svg" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ELBODY — Build Your Strongest Self</title>
+
+  <!-- Baseline metadata. This app is a client-rendered SPA, so these describe
+       the landing page for crawlers and for the first paint; each route then
+       updates them via src/lib/seo.ts. Keep in sync with useSeo() there. -->
+  <title>Personal Fitness Coaching | ELBODY</title>
+  <meta
+    name="description"
+    content="ELBODY is Abdelrhman's personal fitness coaching: a library of 28 exercises with technique cues, complete workout programs for strength, muscle and fat loss, and one-to-one coaching on WhatsApp."
+  />
+
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#181818" />
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="ELBODY" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="Personal Fitness Coaching | ELBODY" />
+  <meta
+    property="og:description"
+    content="ELBODY is Abdelrhman's personal fitness coaching: a library of 28 exercises with technique cues, complete workout programs for strength, muscle and fat loss, and one-to-one coaching on WhatsApp."
+  />
+  <!-- Existing coach photo already shipped in the repo; no image was made for SEO. -->
+  <meta property="og:image" content="/images/profile.png" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Personal Fitness Coaching | ELBODY" />
+  <meta
+    name="twitter:description"
+    content="ELBODY is Abdelrhman's personal fitness coaching: a library of 28 exercises with technique cues, complete workout programs for strength, muscle and fat loss, and one-to-one coaching on WhatsApp."
+  />
+  <meta name="twitter:image" content="/images/profile.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link

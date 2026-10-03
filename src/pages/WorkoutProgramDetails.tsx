@@ -21,6 +21,7 @@ import {
   formatRest,
   getWorkoutProgramBySlug,
 } from "@/data/workout-programs";
+import { useSeo } from "@/lib/seo";
 
 /** Program not found. Mirrors the exercise details 404 so both feel the same. */
 function ProgramNotFound() {
@@ -88,6 +89,18 @@ function ProgramNotFound() {
 export default function WorkoutProgramDetails() {
   const { programSlug } = useParams<{ programSlug: string }>();
   const program = getWorkoutProgramBySlug(programSlug);
+
+  // Built from the program's own fields so the description always matches the
+  // page. The focus list is included because it is what actually distinguishes
+  // two programs that share a level, goal, duration and frequency (push vs
+  // pull), and it keeps every description short enough for search results.
+  useSeo({
+    title: program ? `${program.name} Program` : "Program Not Found",
+    description: program
+      ? `ELBODY ${program.goal.toLowerCase()} program for ${program.focus.join(", ").toLowerCase()}. ${program.level} level, ${program.duration} a session, ${program.frequency}, with warm-up, sets and reps.`
+      : "This workout program could not be found. Browse the ELBODY program library for complete training plans with full exercise order, sets and reps.",
+    indexable: Boolean(program),
+  });
 
   if (!program) {
     return <ProgramNotFound />;

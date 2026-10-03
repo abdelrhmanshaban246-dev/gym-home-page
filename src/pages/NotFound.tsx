@@ -3,8 +3,16 @@ import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/home/Footer";
+import { useSeo } from "@/lib/seo";
 
 export default function NotFound() {
+  // A 404 must never be indexed as if it were real content.
+  useSeo({
+    title: "Page Not Found",
+    description: "The page you are looking for could not be found.",
+    indexable: false,
+  });
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

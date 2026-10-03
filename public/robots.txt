@@ -1,0 +1,20 @@
+# ELBODY — https://elbody (personal fitness coaching)
+#
+# All public content is indexable: the landing page (which contains the About
+# and Contact sections), /workout-programs, /exercises/:slug and
+# /workout-programs/:slug.
+
+User-agent: *
+Allow: /
+Allow: /workout-programs
+Allow: /exercises/
+
+# App screens, not site content. These are also marked noindex at runtime via
+# src/lib/seo.ts, so they stay out of the index even if crawled directly.
+Disallow: /auth
+Disallow: /dashboard
+
+# No sitemap line is declared here on purpose: a Sitemap directive must be an
+# absolute URL, and this project does not yet have a fixed production domain
+# configured anywhere. Add one line here once the domain is fixed:
+#   Sitemap: https://<your-domain>/sitemap.xml

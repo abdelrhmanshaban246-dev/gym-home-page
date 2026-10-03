@@ -4,8 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/home/Footer";
 import { WorkoutProgramGrid } from "@/components/workout-programs/WorkoutProgramGrid";
 import { WORKOUT_PROGRAMS } from "@/data/workout-programs";
+import { useSeo } from "@/lib/seo";
 
 export default function WorkoutPrograms() {
+  useSeo({
+    title: "Workout Programs",
+    description:
+      "Browse ELBODY workout programs for strength, muscle building and fat loss. Each program lists its level, session duration, weekly frequency and the exact exercises, sets and reps to perform.",
+  });
+
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
       <main className="flex-1">
