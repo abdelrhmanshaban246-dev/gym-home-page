@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/home/Footer";
 
 export default function NotFound() {
   return (
@@ -13,13 +14,13 @@ export default function NotFound() {
     >
       {/* Main Content */}
       <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="relative mx-auto max-w-5xl px-4 text-center">
+        <div className="relative mx-auto max-w-6xl px-4 text-center sm:px-6">
           <div className="flex min-h-[200px] items-center justify-center">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
                 Error 404
               </p>
-              <h1 className="mt-3 font-display text-5xl uppercase leading-tight text-foreground sm:text-6xl">
+              <h1 className="mt-3 font-display text-4xl uppercase leading-tight text-foreground sm:text-5xl">
                 Page Not Found
               </h1>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
@@ -39,6 +40,8 @@ export default function NotFound() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </motion.div>
   );
 }

@@ -1,12 +1,14 @@
 import { ArrowLeft, Dumbbell } from "lucide-react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/home/Footer";
 import { WorkoutProgramGrid } from "@/components/workout-programs/WorkoutProgramGrid";
 import { WORKOUT_PROGRAMS } from "@/data/workout-programs";
 
 export default function WorkoutPrograms() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <main className="flex-1">
       <div className="border-b border-border/60 bg-card/30">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2">
@@ -47,6 +49,9 @@ export default function WorkoutPrograms() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ExerciseDetailMedia } from "@/components/exercises/ExerciseMedia";
+import { Footer } from "@/components/home/Footer";
 import { getExerciseBySlug } from "@/data/exercises";
 
 function DetailList({
@@ -49,7 +50,8 @@ export default function ExerciseDetails() {
     // State it instead, and keep the same header and call to action so the
     // visitor has one obvious way out.
     return (
-      <main className="flex min-h-screen flex-col bg-background text-foreground">
+      <div className="flex min-h-screen flex-col bg-background text-foreground">
+        <main className="flex flex-1 flex-col">
         <div className="border-b border-border/60 bg-card/30">
           <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
             <Link to="/#exercises" className="flex items-center gap-2">
@@ -94,12 +96,16 @@ export default function ExerciseDetails() {
             </div>
           </div>
         </section>
-      </main>
+        </main>
+
+        <Footer />
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <main className="flex-1">
       <div className="border-b border-border/60 bg-card/30">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link to="/#exercises" className="flex items-center gap-2">
@@ -122,11 +128,11 @@ export default function ExerciseDetails() {
           aria-hidden
           className="pointer-events-none absolute -right-32 -top-32 size-96 rounded-full bg-primary/10 blur-[100px]"
         />
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
             Exercise Details
           </p>
-          <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <h1 className="font-display text-4xl uppercase leading-tight sm:text-5xl">
               {exercise.name}
             </h1>
@@ -187,7 +193,7 @@ export default function ExerciseDetails() {
       </section>
 
       <section className="pb-20 sm:pb-24">
-        <div className="mx-auto grid max-w-5xl gap-6 px-4 sm:px-6 lg:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:px-6 lg:grid-cols-3">
           <Card className="border-border/70 bg-card/80 lg:col-span-2">
             <CardHeader>
               <div className="flex items-center gap-3">
@@ -253,7 +259,7 @@ export default function ExerciseDetails() {
           </Card>
         </div>
 
-        <div className="mx-auto mt-10 max-w-5xl px-4 sm:px-6">
+        <div className="mx-auto mt-10 max-w-6xl px-4 sm:px-6">
           <Button asChild size="lg" className="h-12 px-8 font-bold uppercase tracking-wider">
             <Link to="/#exercises">
               <ArrowLeft className="size-4" />
@@ -262,6 +268,9 @@ export default function ExerciseDetails() {
           </Button>
         </div>
       </section>
-    </main>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

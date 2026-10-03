@@ -1,5 +1,6 @@
 import { Dumbbell, Instagram, Mail } from "lucide-react";
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
+import { Link, useLocation } from "react-router";
 import { EXERCISE_MEDIA } from "@/data/exercise-media";
 
 /** Distinct licences actually used by the exercise media, for attribution. */
@@ -47,7 +48,43 @@ const CONTACT_LINKS: ContactLink[] = [
   { label: "Email", href: EMAIL_URL, icon: Mail },
 ];
 
+/**
+ * The footer is shared by the landing page and the inner pages. Its links are
+ * same-page anchors on the landing page, but on an inner page there is no
+ * `#exercises` / `#programs` / `#top` element to scroll to, so they would do
+ * nothing. Resolve them against the landing page instead — and only when we
+ * are not already there, so the landing page keeps its exact behaviour.
+ */
+function HomeLink({
+  onHome,
+  href,
+  className,
+  children,
+}: {
+  onHome: boolean;
+  href: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  if (onHome) {
+    return (
+      <a href={href} className={className}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <Link to={`/${href}`} className={className}>
+      {children}
+    </Link>
+  );
+}
+
 export function Footer() {
+  const { pathname } = useLocation();
+  const onHome = pathname === "/";
+
   return (
     <footer id="contact" className="scroll-mt-20 border-t border-border/60 bg-card/40">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
@@ -57,12 +94,12 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-[1.4fr_1fr]">
           {/* Brand */}
           <div>
-            <a href="#top" className="flex items-center gap-2">
+            <HomeLink onHome={onHome} href="#top" className="flex items-center gap-2">
               <span className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
                 <Dumbbell className="size-4.5" />
               </span>
               <span className="font-display text-xl tracking-wide">ELBODY</span>
-            </a>
+            </HomeLink>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
               Personal coaching that turns effort into measurable, lasting
               results.
@@ -78,12 +115,13 @@ export function Footer() {
               <ul className="mt-4 space-y-2.5">
                 {column.links.map((link) => (
                   <li key={link.href}>
-                    <a
+                    <HomeLink
+                      onHome={onHome}
                       href={link.href}
                       className="text-sm text-muted-foreground transition-colors hover:text-primary"
                     >
                       {link.label}
-                    </a>
+                    </HomeLink>
                   </li>
                 ))}
               </ul>

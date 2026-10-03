@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Link, useParams } from "react-router";
 import { Button } from "@/components/ui/button";
+import { Footer } from "@/components/home/Footer";
 import {
   Card,
   CardContent,
@@ -24,7 +25,8 @@ import {
 /** Program not found. Mirrors the exercise details 404 so both feel the same. */
 function ProgramNotFound() {
   return (
-    <main className="flex min-h-screen flex-col bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <main className="flex flex-1 flex-col">
       <div className="border-b border-border/60 bg-card/30">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link to="/workout-programs" className="flex items-center gap-2">
@@ -36,7 +38,7 @@ function ProgramNotFound() {
           <Button asChild variant="outline" size="sm">
             <Link to="/workout-programs">
               <ArrowLeft className="size-4" />
-              Back to Workout Programs
+              Back to Programs
             </Link>
           </Button>
         </div>
@@ -76,7 +78,10 @@ function ProgramNotFound() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
 
@@ -98,7 +103,8 @@ export default function WorkoutProgramDetails() {
     .filter((movement): movement is NonNullable<typeof movement> => Boolean(movement));
 
   return (
-    <main className="min-h-screen bg-background text-foreground">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <main className="flex-1">
       <div className="border-b border-border/60 bg-card/30">
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link to="/workout-programs" className="flex items-center gap-2">
@@ -110,7 +116,7 @@ export default function WorkoutProgramDetails() {
           <Button asChild variant="outline" size="sm">
             <Link to="/workout-programs">
               <ArrowLeft className="size-4" />
-              Back to Workout Programs
+              Back to Programs
             </Link>
           </Button>
         </div>
@@ -121,11 +127,11 @@ export default function WorkoutProgramDetails() {
           aria-hidden
           className="pointer-events-none absolute -right-32 -top-32 size-96 rounded-full bg-primary/10 blur-[100px]"
         />
-        <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
           <p className="text-xs font-bold uppercase tracking-[0.22em] text-primary">
             Workout Program
           </p>
-          <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <h1 className="font-display text-4xl uppercase leading-tight sm:text-5xl">
               {program.name}
             </h1>
@@ -169,7 +175,7 @@ export default function WorkoutProgramDetails() {
             {program.focus.map((focus) => (
               <li
                 key={focus}
-                className="rounded-md border border-border/70 bg-background/60 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+                className="rounded-md border border-border/70 bg-background/60 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
               >
                 {focus}
               </li>
@@ -179,7 +185,7 @@ export default function WorkoutProgramDetails() {
       </section>
 
       <section className="pb-20 sm:pb-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="grid gap-6 lg:grid-cols-3">
             <Card className="border-border/70 bg-card/80 lg:col-span-2">
               <CardHeader>
@@ -282,6 +288,9 @@ export default function WorkoutProgramDetails() {
           </div>
         </div>
       </section>
-    </main>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
