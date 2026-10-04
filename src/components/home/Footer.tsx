@@ -15,7 +15,7 @@ const FOOTER_LINKS: {
   {
     heading: "Explore",
     links: [
-      { label: "Exercises", href: "#exercises" },
+      { label: "Exercises", href: "/exercises" },
       { label: "Programs", href: "#programs" },
       { label: "Contact", href: "#contact" },
     ],
@@ -49,10 +49,11 @@ const CONTACT_LINKS: ContactLink[] = [
 ];
 
 /**
- * The footer is shared by the landing page and the inner pages. Its links are
- * same-page anchors on the landing page, but on an inner page there is no
- * `#exercises` / `#programs` / `#top` element to scroll to, so they would do
- * nothing. Resolve them against the landing page instead — and only when we
+ * The footer is shared by the landing page and the inner pages. A link that is
+ * already a route (e.g. `/exercises`) goes through the router from everywhere.
+ * A `#` link is a same-page anchor on the landing page, but on an inner page
+ * there is no `#programs` / `#top` element to scroll to, so it would do
+ * nothing — resolve those against the landing page instead, and only when we
  * are not already there, so the landing page keeps its exact behaviour.
  */
 function HomeLink({
@@ -66,6 +67,14 @@ function HomeLink({
   className?: string;
   children: ReactNode;
 }) {
+  if (href.startsWith("/")) {
+    return (
+      <Link to={href} className={className}>
+        {children}
+      </Link>
+    );
+  }
+
   if (onHome) {
     return (
       <a href={href} className={className}>

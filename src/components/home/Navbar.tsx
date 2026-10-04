@@ -1,16 +1,45 @@
 import { useEffect, useState } from "react";
 import { Dumbbell, Menu, X } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const WHATSAPP_URL = "https://wa.me/201023604423";
 
 const NAV_LINKS = [
-  { label: "Exercises", href: "#exercises" },
+  // The exercise library has its own page now; the rest are landing anchors.
+  { label: "Exercises", href: "/exercises" },
   { label: "Programs", href: "#programs" },
   { label: "Coaching", href: "#coaching" },
   { label: "Contact", href: "#contact" },
 ];
+
+/** Route links go through the router; `#` links stay plain same-page anchors. */
+function NavAnchor({
+  href,
+  className,
+  onClick,
+  children,
+}: {
+  href: string;
+  className?: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+}) {
+  if (href.startsWith("/")) {
+    return (
+      <Link to={href} className={className} onClick={onClick}>
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={href} className={className} onClick={onClick}>
+      {children}
+    </a>
+  );
+}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -47,13 +76,13 @@ export function Navbar() {
         {/* Desktop nav */}
         <nav className="hidden items-center gap-8 md:flex">
           {NAV_LINKS.map((link) => (
-            <a
+            <NavAnchor
               key={link.href}
               href={link.href}
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
-            </a>
+            </NavAnchor>
           ))}
         </nav>
 
@@ -86,14 +115,14 @@ export function Navbar() {
         <nav className="border-t border-border/60 bg-background/95 px-4 py-4 backdrop-blur-md md:hidden">
           <div className="flex flex-col gap-1">
             {NAV_LINKS.map((link) => (
-              <a
+              <NavAnchor
                 key={link.href}
                 href={link.href}
                 className="rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 onClick={() => setOpen(false)}
               >
                 {link.label}
-              </a>
+              </NavAnchor>
             ))}
             <Button
               asChild
