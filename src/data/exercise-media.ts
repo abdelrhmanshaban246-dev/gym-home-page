@@ -65,8 +65,22 @@ export interface ExerciseMediaRecord {
 
 const COMMONS_FILE = "https://commons.wikimedia.org/wiki/File:";
 
+/**
+ * Vite's configured base (e.g. `/gym-home-page/` when deployed to GitHub Pages).
+ *
+ * Media files live in `public/exercises` and are referenced by root-absolute
+ * path, which resolves against the domain root and therefore 404s when the site
+ * is served from a subpath. Absolute URLs (YouTube embeds) must be left alone,
+ * so only paths starting with `/` are prefixed.
+ */
+const BASE_URL: string = import.meta.env.BASE_URL ?? "/";
+
+function withBaseUrl(path: string): string {
+  return path.startsWith("/") ? `${BASE_URL}${path.slice(1)}` : path;
+}
+
 /** Detail media for each exercise, matched by exercise name during curation. */
-export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
+const RAW_EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
   "bench-press": {
     kind: "video",
     src: "/exercises/bench-press.webm",
@@ -379,6 +393,28 @@ export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> = {
     author: "Mixkit",
   },
 };
+
+/**
+ * The public registry, with every locally-hosted media path prefixed by the
+ * Vite base so it resolves under the deployment subpath (GitHub Pages).
+ *
+ * Filenames are untouched; only the leading `/` gains the base. Absolute URLs
+ * (YouTube embeds, source and licence links) pass through unchanged.
+ */
+export const EXERCISE_MEDIA: Record<string, ExerciseMediaRecord> =
+  Object.fromEntries(
+    Object.entries(RAW_EXERCISE_MEDIA).map(([slug, media]) => [
+      slug,
+      {
+        ...media,
+        src: withBaseUrl(media.src),
+        cardSrc: withBaseUrl(media.cardSrc),
+        ...(media.loopFrame
+          ? { loopFrame: withBaseUrl(media.loopFrame) }
+          : {}),
+      },
+    ]),
+  );
 
 /**
  * Exercises deliberately left without media.
