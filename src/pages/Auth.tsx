@@ -125,14 +125,20 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
             <>
               <CardHeader className="text-center">
               <div className="flex justify-center">
-                    <img
-                      src={logo}
-                      alt="ELBODY logo"
-                      width={64}
-                      height={64}
-                      className="rounded-lg mb-4 mt-4 cursor-pointer"
+                    <button
+                      type="button"
                       onClick={() => navigate("/")}
-                    />
+                      className="rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                      aria-label="ELBODY home"
+                    >
+                      <img
+                        src={logo}
+                        alt=""
+                        width={64}
+                        height={64}
+                        className="rounded-lg mb-4 mt-4"
+                      />
+                    </button>
                   </div>
                 <CardTitle className="text-xl">Get Started</CardTitle>
                 <CardDescription>
@@ -146,9 +152,11 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                     <div className="relative flex-1">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
+                        id="auth-email"
                         name="email"
                         placeholder="name@example.com"
                         type="email"
+                        aria-label="Email address"
                         className="pl-9"
                         disabled={isLoading}
                         required
@@ -159,11 +167,19 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       variant="outline"
                       size="icon"
                       disabled={isLoading}
+                      aria-label={
+                        isLoading
+                          ? "Sending verification code"
+                          : "Send verification code"
+                      }
                     >
                       {isLoading ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2
+                          className="h-4 w-4 animate-spin"
+                          aria-hidden="true"
+                        />
                       ) : (
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
                       )}
                     </Button>
                   </div>
@@ -216,6 +232,8 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                       onChange={setOtp}
                       maxLength={6}
                       disabled={isLoading}
+                      aria-label="Six digit verification code"
+                      autoComplete="one-time-code"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && otp.length === 6 && !isLoading) {
                           // Find the closest form and submit it
@@ -241,6 +259,7 @@ function Auth({ redirectAfterAuth }: AuthProps = {}) {
                   <p className="text-sm text-muted-foreground text-center mt-4">
                     Didn't receive a code?{" "}
                     <Button
+                      type="button"
                       variant="link"
                       className="p-0 h-auto"
                       onClick={() => setStep("signIn")}
