@@ -50,9 +50,12 @@
 
 /* CHANGE VALUES FOR THEME — premium dark fitness: graphite gray + ember orange accent.
    Neutral surfaces use zero chroma (oklch L 0 0) so they read as clean graphite, never blue/navy/purple.
-   Current palette (sRGB): background #181818, card/sidebar #222222, popover #242424, muted #252525,
+   Current palette (sRGB): background #1F1F1F, card/sidebar #222222, popover #242424, muted #252525,
    secondary #282828, accent/sidebar-accent #2D2D2D, foreground #F2F2F2, muted-foreground #B0B0B0.
-   Revert history: near-black charcoal was background oklch(0.159 0 0), card oklch(0.196 0 0),
+   Background is capped at #1F1F1F (oklch 0.239) because --card is #222222 (oklch 0.252); any lighter
+   background collapses the card/page separation, and #242424 would invert it (cards darker than page).
+   Revert history: previous graphite was background oklch(0.209 0 0) (#181818); near-black charcoal was
+   background oklch(0.159 0 0), card oklch(0.196 0 0),
    popover oklch(0.205 0 0), muted oklch(0.209 0 0), secondary oklch(0.222 0 0), accent oklch(0.239 0 0),
    foreground oklch(0.967 0 0), muted-foreground oklch(0.715 0 0).
    Earlier navy experiment was background oklch(0.16 0.022 258), card oklch(0.205 0.026 258),
@@ -60,7 +63,7 @@
    accent oklch(0.26 0.03 258), foreground oklch(0.975 0.006 255), muted-foreground oklch(0.71 0.02 255). */
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.209 0 0);
+  --background: oklch(0.239 0 0);
   --foreground: oklch(0.961 0 0);
   --card: oklch(0.252 0 0);
   --card-foreground: oklch(0.961 0 0);
@@ -95,7 +98,7 @@
 
 /* The site is dark-only — keep the dark class on the same palette */
 .dark {
-  --background: oklch(0.209 0 0);
+  --background: oklch(0.239 0 0);
   --foreground: oklch(0.961 0 0);
   --card: oklch(0.252 0 0);
   --card-foreground: oklch(0.961 0 0);
