@@ -8,7 +8,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   // Deployed to GitHub Pages under the repo subpath. Without this, built
   // assets are emitted as /assets/* and 404 under /gym-home-page/.
-  base: "/gym-home-page/",
+  base: process.env.VERCEL ? "/" : "/gym-home-page/",
   plugins: [react(), vlyPlugin(), tailwindcss()],
   resolve: {
     alias: {
